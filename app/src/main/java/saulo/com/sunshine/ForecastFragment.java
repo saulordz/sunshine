@@ -35,22 +35,22 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-//            mForecastData = new ArrayList<>();
-//            mForecastData.add("Today\tSunny\t88/63");
-//            mForecastData.add("Tomorrow\tRainy\t60/58");
-//            mForecastData.add("The day after\tSunny\t98/70");
-//            mForecastData.add("The next day\tHot\t110/100");
-//
-//            mAdapter = new ArrayAdapter<String>(
-//                    getActivity(),
-//                    R.layout.list_item_forecast,
-//                    R.id.list_item_forecast_text_view,
-//                    mForecastData);
+            mForecastData = new ArrayList<>();
+            mForecastData.add("Today\tSunny\t88/63");
+            mForecastData.add("Tomorrow\tRainy\t60/58");
+            mForecastData.add("The day after\tSunny\t98/70");
+            mForecastData.add("The next day\tHot\t110/100");
 
-//            mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
-//            mListView.setAdapter(mAdapter);
+            mAdapter = new ArrayAdapter<String>(
+                    getActivity(),
+                    R.layout.list_item_forecast,
+                    R.id.list_item_forecast_text_view,
+                    mForecastData);
 
-        new FetchWeatherTask().execute("");
+            mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
+            mListView.setAdapter(mAdapter);
+
+//        new FetchWeatherTask().execute("");
 
         return rootView;
     }
