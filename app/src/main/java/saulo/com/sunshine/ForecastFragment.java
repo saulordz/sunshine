@@ -64,8 +64,6 @@ public class ForecastFragment extends Fragment {
             mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
             mListView.setAdapter(mAdapter);
 
-//        new FetchWeatherTask().execute("");
-
         return rootView;
     }
 
@@ -73,7 +71,7 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_refresh) {
             new FetchWeatherTask().execute("");
         }
 
@@ -81,6 +79,8 @@ public class ForecastFragment extends Fragment {
     }
 
     public class FetchWeatherTask extends AsyncTask<String, Void, String>{
+
+        private static final String TAG = "FetchWeatherTaskTAG_";
 
         @Override
         protected String doInBackground(String... params) {
@@ -142,6 +142,8 @@ public class ForecastFragment extends Fragment {
                     }
                 }
             }
+
+            Log.d(TAG, "doInBackground: " + forecastJsonStr);
 
             return forecastJsonStr;
         }
