@@ -27,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by saulo on 4/16/16.
@@ -108,7 +109,7 @@ public class ForecastFragment extends Fragment {
             String forecastJsonStr = null;
 
             try {
-                
+
                 Uri urlBuilder = Uri.parse(BASE_URL).buildUpon()
                         .appendQueryParameter(ZIP_CODE_PARAMETER, zipCode)
                         .appendQueryParameter(MODE_PARAMETER, "json")
@@ -116,7 +117,6 @@ public class ForecastFragment extends Fragment {
                         .appendQueryParameter(DAYS_PARAMETER, "7")
                         .appendQueryParameter(API_KEY_PARAMETER, "245a178c9694509056d37a592a355b5d")
                         .build();
-                Log.d(TAG, "doInBackground: " + urlBuilder.toString());
 
                 URL url = new URL(urlBuilder.toString());
 
@@ -165,8 +165,6 @@ public class ForecastFragment extends Fragment {
                 }
             }
 
-            Log.d(TAG, "doInBackground: " + forecastJsonStr);
-
             String[] result = null;
             try {
                 result = getWeatherDataFromJson(forecastJsonStr, 7);
@@ -177,9 +175,17 @@ public class ForecastFragment extends Fragment {
             return result;
         }
 
+        @Override
+        protected void onPostExecute(String[] strings) {
+            super.onPostExecute(strings);
+            mForecastData.clear();
+            mForecastData.addAll(Arrays.asList(strings));
+            mAdapter.notifyDataSetChanged();
+        }
+
         /* The date/time conversion code is going to be moved outside the asynctask later,
-       * so for convenience we're breaking it out into its own method now.
-       */
+               * so for convenience we're breaking it out into its own method now.
+               */
         private String getReadableDateString(long time){
             // Because the API returns a unix timestamp (measured in seconds),
             // it must be converted to milliseconds in order to be converted to valid date.
@@ -269,9 +275,6 @@ public class ForecastFragment extends Fragment {
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 
-            for (String s : resultStrs) {
-                Log.v(TAG, "Forecast entry: " + s);
-            }
             return resultStrs;
 
         }
