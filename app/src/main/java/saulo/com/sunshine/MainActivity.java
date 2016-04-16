@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static class PlaceholderFragment extends Fragment {
 
-        ArrayList<String> mForecastData;
+        private ArrayList<String> mForecastData;
+        private ArrayAdapter<String> mAdapter;
 
         public PlaceholderFragment() {
         }
@@ -64,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
             mForecastData.add("Tomorrow\tRainy\t60/58");
             mForecastData.add("The day after\tSunny\t98/70");
             mForecastData.add("The next day\tHot\t110/100");
+
+            mAdapter = new ArrayAdapter<String>(
+                    getActivity(),
+                    R.layout.list_item_forecast,
+                    R.id.list_item_forecast_text_view,
+                    mForecastData);
+
+            
             return rootView;
         }
     }
