@@ -1,5 +1,6 @@
 package saulo.com.sunshine;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -49,20 +50,20 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            mForecastData = new ArrayList<>();
-            mForecastData.add("Today\tSunny\t88/63");
-            mForecastData.add("Tomorrow\tRainy\t60/58");
-            mForecastData.add("The day after\tSunny\t98/70");
-            mForecastData.add("The next day\tHot\t110/100");
+        mForecastData = new ArrayList<>();
+        mForecastData.add("Today\tSunny\t88/63");
+        mForecastData.add("Tomorrow\tRainy\t60/58");
+        mForecastData.add("The day after\tSunny\t98/70");
+        mForecastData.add("The next day\tHot\t110/100");
 
-            mAdapter = new ArrayAdapter<String>(
-                    getActivity(),
-                    R.layout.list_item_forecast,
-                    R.id.list_item_forecast_text_view,
-                    mForecastData);
+        mAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.list_item_forecast,
+                R.id.list_item_forecast_text_view,
+                mForecastData);
 
-            mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
-            mListView.setAdapter(mAdapter);
+        mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
+        mListView.setAdapter(mAdapter);
 
         return rootView;
     }
@@ -72,31 +73,53 @@ public class ForecastFragment extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
-            new FetchWeatherTask().execute("");
+            new FetchWeatherTask().execute("30339");
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public class FetchWeatherTask extends AsyncTask<String, Void, String>{
+    public class FetchWeatherTask extends AsyncTask<String, Void, String> {
 
         private static final String TAG = "FetchWeatherTaskTAG_";
+        private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
+        private static final String ZIP_CODE_PARAMETER = "q";
+        private static final String MODE_PARAMETER = "mode";
+        private static final String UNIT_PARAMETER = "units";
+        private static final String DAYS_PARAMETER = "cnt";
+        private static final String API_KEY_PARAMETER= "appid";
 
         @Override
         protected String doInBackground(String... params) {
-            // These two need to be declared outside the try/catch
-            // so that they can be closed in the finally block.
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
+            String zipCode = params[0];
+            if (zipCode == null) {
+                zipCode = "30339"; //default zip code
+            }
 
             // Will contain the raw JSON response as a string.
             String forecastJsonStr = null;
 
             try {
-                // Construct the URL for the OpenWeatherMap query
-                // Possible parameters are avaiable at OWM's forecast API page, at
-                // http://openweathermap.org/API#forecast
-                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=30339&mode=json&units=metric&cnt=7&appid=245a178c9694509056d37a592a355b5d");
+
+//                Uri.Builder urlBuilder = new Uri.Builder();
+//                urlBuilder.appendPath("http://api.openweathermap.org/data/2.5/forecast/daily");
+//                urlBuilder.appendQueryParameter(ZIP_CODE_PARAMETER, zipCode);
+//                urlBuilder.appendQueryParameter(MODE_PARAMETER, "json");
+//                urlBuilder.appendQueryParameter(UNIT_PARAMETER, "metric");
+//                urlBuilder.appendQueryParameter(DAYS_PARAMETER, "7");
+
+                Uri urlBuilder = Uri.parse(BASE_URL).buildUpon()
+                        .appendQueryParameter(ZIP_CODE_PARAMETER, zipCode)
+                        .appendQueryParameter(MODE_PARAMETER, "json")
+                        .appendQueryParameter(UNIT_PARAMETER, "metric")
+                        .appendQueryParameter(DAYS_PARAMETER, "7")
+                        .appendQueryParameter(API_KEY_PARAMETER, "245a178c9694509056d37a592a355b5d")
+                        .build();
+                Log.d(TAG, "doInBackground: " + urlBuilder.toString());
+
+                URL url = new URL(urlBuilder.toString());
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -130,7 +153,7 @@ public class ForecastFragment extends Fragment {
                 // If the code didn't successfully get the weather data, there's no point in attemping
                 // to parse it.
                 return null;
-            } finally{
+            } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
                 }
