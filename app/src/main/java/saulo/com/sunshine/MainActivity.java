@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         private ArrayList<String> mForecastData;
         private ArrayAdapter<String> mAdapter;
+        private ListView mListView;
 
         public PlaceholderFragment() {
         }
@@ -73,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
                     R.id.list_item_forecast_text_view,
                     mForecastData);
 
-            
+            mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
+            mListView.setAdapter(mAdapter);
+
             return rootView;
         }
     }
