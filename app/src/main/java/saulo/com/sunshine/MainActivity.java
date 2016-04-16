@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static class PlaceholderFragment extends Fragment {
 
+        ArrayList<String> mForecastData;
+
         public PlaceholderFragment() {
         }
 
@@ -54,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            mForecastData = new ArrayList<>();
+            mForecastData.add("Today\tSunny\t88/63");
+            mForecastData.add("Tomorrow\tRainy\t60/58");
+            mForecastData.add("The day after\tSunny\t98/70");
+            mForecastData.add("The next day\tHot\t110/100");
             return rootView;
         }
     }
