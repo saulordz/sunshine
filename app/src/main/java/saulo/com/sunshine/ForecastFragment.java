@@ -78,14 +78,8 @@ public class ForecastFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Context context = view.getContext();
-                CharSequence text = mForecastData.get(position);
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-
+                String text = mForecastData.get(position);
+                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
             }
         });
         return rootView;
