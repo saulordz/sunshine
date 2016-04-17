@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -41,6 +42,7 @@ public class ForecastFragment extends Fragment {
     private ArrayList<String> mForecastData;
     private ArrayAdapter<String> mAdapter;
     private ListView mListView;
+    private String userLocation;
 
     public ForecastFragment() {
     }
@@ -60,6 +62,9 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        String location = PreferenceManager.getDefaultSharedPreferences(rootView.getContext())
+                .getString(getActivity().getString(R.string.pref_location_key), getActivity().getString(R.string.default_location_value));
 
         mForecastData = new ArrayList<>();
         mForecastData.add("Today\tSunny\t88/63");
@@ -93,7 +98,7 @@ public class ForecastFragment extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
-            new FetchWeatherTask().execute("30339");
+            new FetchWeatherTask().execute(userLocation);
         }
 
         return super.onOptionsItemSelected(item);
