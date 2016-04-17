@@ -5,7 +5,7 @@
         <item>@string/pref_imperial</item>
     </string-array>
     <string-array name="preference_units_values">
-        <item>1</item>
-        <item>2</item>
+        <item>@string/pref_metric</item>
+        <item>@string/pref_imperial</item>
     </string-array>
 </resources>
