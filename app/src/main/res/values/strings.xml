@@ -10,4 +10,5 @@
     <string name="pref_metric">Metric</string>
     <string name="pref_units_key">preference_unit_key</string>
     <string name="preference_units_title">Temperature units</string>
+    <string name="action_show_map">Show Map</string>
 </resources>
