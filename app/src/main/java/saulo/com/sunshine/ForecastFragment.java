@@ -59,6 +59,12 @@ public class ForecastFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -93,12 +99,15 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
+    private void updateWeather(){
+        new FetchWeatherTask().execute(userLocation);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
-            new FetchWeatherTask().execute(userLocation);
+            updateWeather();
         }
 
         return super.onOptionsItemSelected(item);
