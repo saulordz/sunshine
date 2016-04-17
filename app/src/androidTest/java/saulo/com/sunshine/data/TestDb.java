@@ -1,5 +1,6 @@
 package saulo.com.sunshine.data;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
@@ -99,21 +100,32 @@ public class TestDb extends AndroidTestCase {
     */
     public void testLocationTable() {
         // First step: Get reference to writable database
+        WeatherDbHelper helper = new WeatherDbHelper(mContext);
+        SQLiteDatabase db = helper.getWritableDatabase();
 
         // Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
+        ContentValues location1 = TestUtilities.createNorthPoleLocationValues();
 
         // Insert ContentValues into database and get a row ID back
+        db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, location1);
 
         // Query the database and receive a Cursor back
+        Cursor cursor = db.query(WeatherContract.LocationEntry.TABLE_NAME, null, null, null, null, null, null);
 
         // Move the cursor to a valid database row
+        assertTrue( "Error: No Records returned from location query", cursor.moveToFirst() );
 
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
+        TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed", cursor, location1);
 
         // Finally, close the cursor and database
+        assertFalse( "Error: More than one record returned from location query", cursor.moveToNext());
+
+        cursor.close();
+        db.close();
 
     }
 
