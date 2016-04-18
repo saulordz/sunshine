@@ -293,7 +293,7 @@ public class WeatherProvider extends ContentProvider {
                 break;
             }
             case LOCATION: {
-                rowsUpdated = db.update((WeatherContract.LocationEntry.TABLE_NAME, values, selection, selectionArgs));
+                rowsUpdated = db.update(WeatherContract.LocationEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
             default:
