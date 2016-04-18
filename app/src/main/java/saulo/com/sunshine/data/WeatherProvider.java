@@ -25,7 +25,7 @@ public class WeatherProvider extends ContentProvider {
 
     private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
 
-    static{
+    static {
         sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
 
         //This is an inner join which looks like
@@ -41,12 +41,12 @@ public class WeatherProvider extends ContentProvider {
 
     //location.location_setting = ?
     private static final String sLocationSettingSelection =
-            WeatherContract.LocationEntry.TABLE_NAME+
+            WeatherContract.LocationEntry.TABLE_NAME +
                     "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? ";
 
     //location.location_setting = ? AND date >= ?
     private static final String sLocationSettingWithStartDateSelection =
-            WeatherContract.LocationEntry.TABLE_NAME+
+            WeatherContract.LocationEntry.TABLE_NAME +
                     "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
                     WeatherContract.WeatherEntry.COLUMN_DATE + " >= ? ";
 
@@ -103,16 +103,14 @@ public class WeatherProvider extends ContentProvider {
         testUriMatcher test within TestUriMatcher.
      */
     static UriMatcher buildUriMatcher() {
-        // 1) The code passed into the constructor represents the code to return for the root
-        // URI.  It's common to use NO_MATCH as the code for this case. Add the constructor below.
-
-
-        // 2) Use the addURI function to match each of the types.  Use the constants from
-        // WeatherContract to help define the types to the UriMatcher.
-
-
-        // 3) Return the new matcher!
-        return null;
+        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+        final String authority = WeatherContract.CONTENT_AUTHORITY;
+        // For each type of URI you want to add, create a corresponding code.
+        matcher.addURI(authority, WeatherContract.PATH_WEATHER, WEATHER);
+        matcher.addURI(authority, WeatherContract.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
+        matcher.addURI(authority, WeatherContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
+        matcher.addURI(authority, WeatherContract.PATH_LOCATION, LOCATION);
+        return matcher;
     }
 
     /*
@@ -156,8 +154,7 @@ public class WeatherProvider extends ContentProvider {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             // "weather/*/*"
-            case WEATHER_WITH_LOCATION_AND_DATE:
-            {
+            case WEATHER_WITH_LOCATION_AND_DATE: {
                 retCursor = getWeatherByLocationSettingAndDate(uri, projection, sortOrder);
                 break;
             }
@@ -197,7 +194,7 @@ public class WeatherProvider extends ContentProvider {
             case WEATHER: {
                 normalizeDate(values);
                 long _id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, values);
-                if ( _id > 0 )
+                if (_id > 0)
                     returnUri = WeatherContract.WeatherEntry.buildWeatherUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
