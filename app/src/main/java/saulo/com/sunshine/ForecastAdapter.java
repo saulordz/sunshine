@@ -18,6 +18,8 @@ import saulo.com.sunshine.data.WeatherContract;
  */
 public class ForecastAdapter extends CursorAdapter {
 
+    private final static int VIEW_TYPE_TODAY = 0;
+    private final static int VIEW_TYPE_REGULAR = 1;
     public ForecastAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
@@ -31,10 +33,23 @@ public class ForecastAdapter extends CursorAdapter {
         return highLowStr;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if(position == 0){
+            return VIEW_TYPE_TODAY;
+        }
+        return VIEW_TYPE_REGULAR;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
     /*
-        This is ported from FetchWeatherTask --- but now we go straight from the cursor to the
-        string.
-     */
+            This is ported from FetchWeatherTask --- but now we go straight from the cursor to the
+            string.
+         */
     private String convertCursorRowToUXFormat(Cursor cursor) {
         String highAndLow = formatHighLows(
                 cursor.getDouble(WeatherContract.COL_WEATHER_MAX_TEMP),
@@ -50,7 +65,16 @@ public class ForecastAdapter extends CursorAdapter {
      */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.list_item_forecast, parent, false);
+        int viewType = getItemViewType(cursor.getPosition());
+        int layoutId = -1;
+        if(viewType == VIEW_TYPE_TODAY){
+            layoutId = R.layout.list_item_forecast_today;
+        }
+        else {
+            layoutId = R.layout.list_item_forecast;
+        }
+
+        View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
 
         return view;
     }
