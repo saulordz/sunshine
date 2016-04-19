@@ -61,6 +61,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         mAdapter = new ForecastAdapter(getActivity(), null, 0);
 
+        mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
+        mListView.setAdapter(mAdapter);
+
         return rootView;
     }
 
