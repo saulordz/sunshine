@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showMap() {
         String location = PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(getString(R.string.pref_location_text), getString(R.string.default_location_value));
+                .getString(getString(R.string.pref_location_text), getString(R.string.pref_location_default));
 
         Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
                 .appendQueryParameter("q", location)

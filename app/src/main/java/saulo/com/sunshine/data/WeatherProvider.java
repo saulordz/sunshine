@@ -1,6 +1,5 @@
 package saulo.com.sunshine.data;
 
-import android.annotation.TargetApi;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -333,15 +332,5 @@ public class WeatherProvider extends ContentProvider {
             default:
                 return super.bulkInsert(uri, values);
         }
-    }
-
-    // You do not need to call this method. This is a method specifically to assist the testing
-    // framework in running smoothly. You can read more at:
-    // http://developer.android.com/reference/android/content/ContentProvider.html#shutdown()
-    @Override
-    @TargetApi(11)
-    public void shutdown() {
-        mOpenHelper.close();
-        super.shutdown();
     }
 }

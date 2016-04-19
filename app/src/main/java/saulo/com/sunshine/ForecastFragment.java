@@ -1,12 +1,9 @@
 package saulo.com.sunshine;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,19 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by saulo on 4/16/16.
@@ -91,7 +76,7 @@ public class ForecastFragment extends Fragment {
 
     private void updateWeather() {
         String userLocation = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .getString(getActivity().getString(R.string.pref_location_key), getActivity().getString(R.string.default_location_value));
+                .getString(getActivity().getString(R.string.pref_location_key), getActivity().getString(R.string.pref_location_default));
         Log.d(TAG, "updateWeather: " + userLocation);
         new FetchWeatherTask(getActivity(), mAdapter).execute(userLocation);
     }
