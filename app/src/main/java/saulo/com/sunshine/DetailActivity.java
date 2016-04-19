@@ -114,7 +114,9 @@ public class DetailActivity extends ActionBarActivity {
             mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
 
             mShareActionProvider.setShareIntent(getShareIntent());
-
+            if (forecast != null) {
+                mShareActionProvider.setShareIntent(getShareIntent());
+            }
 
         }
 
@@ -170,9 +172,13 @@ public class DetailActivity extends ActionBarActivity {
             String low = Utility.formatTemperature(
                     data.getDouble(WeatherContract.COL_WEATHER_MIN_TEMP), isMetric);
 
-            forecast= String.format("%s - %s - %s/%s", dateString, weatherDescription, high, low);
+            forecast = String.format("%s - %s - %s/%s", dateString, weatherDescription, high, low);
 
             mTextView.setText(forecast);
+
+            if (mShareActionProvider != null) {
+                mShareActionProvider.setShareIntent(getShareIntent());
+            }
         }
 
         @Override
