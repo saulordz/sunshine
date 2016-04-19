@@ -72,7 +72,10 @@ public class DetailActivity extends ActionBarActivity {
 
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-            forecast = getActivity().getIntent().getExtras().getString(Intent.EXTRA_TEXT);
+            Intent intent = getActivity().getIntent();
+            if(intent != null){
+                forecast = intent.getDataString();
+            }
 
             mTextView = (TextView) rootView.findViewById(R.id.f_detail_text_view);
             mTextView.setText(forecast);
