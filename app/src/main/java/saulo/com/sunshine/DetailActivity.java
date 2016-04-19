@@ -1,8 +1,12 @@
 package saulo.com.sunshine;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
@@ -13,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import saulo.com.sunshine.data.WeatherContract;
 
 public class DetailActivity extends ActionBarActivity {
 
@@ -56,7 +62,7 @@ public class DetailActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class DetailFragment extends Fragment {
+    public static class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
         private static final String HASHTAG_POSTFIX = "#SunshineApp";
         private String forecast;
@@ -68,13 +74,19 @@ public class DetailActivity extends ActionBarActivity {
         }
 
         @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+        }
+
+        @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
             Intent intent = getActivity().getIntent();
-            if(intent != null){
+            if (intent != null) {
                 forecast = intent.getDataString();
+                getLoaderManager().initLoader(ForecastFragment.WEATHER_LOADER_ID, null, this);
             }
 
             mTextView = (TextView) rootView.findViewById(R.id.f_detail_text_view);
@@ -87,7 +99,7 @@ public class DetailActivity extends ActionBarActivity {
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_TEXT,
-                    forecast + " " +HASHTAG_POSTFIX);
+                    forecast + " " + HASHTAG_POSTFIX);
             return shareIntent;
         }
 
@@ -103,6 +115,68 @@ public class DetailActivity extends ActionBarActivity {
 
             mShareActionProvider.setShareIntent(getShareIntent());
 
+
+        }
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//            String locationSetting = Utility.getPreferredLocation(getActivity());
+//
+//            // Sort order:  Ascending, by date.
+//            String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+//            Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+//                    locationSetting, System.currentTimeMillis());
+//            return new CursorLoader(getActivity(),
+//                    new Uri.Builder().appendPath(forecast).build(),
+//                    WeatherContract.FORECAST_COLUMNS,
+//                    null,
+//                    null,
+//                    sortOrder);
+
+            Intent intent = getActivity().getIntent();
+            if (intent == null) {
+                return null;
+            }
+
+            // Now create and return a CursorLoader that will take care of
+            // creating a Cursor for the data being displayed.
+            return new CursorLoader(
+                    getActivity(),
+                    intent.getData(),
+                    WeatherContract.FORECAST_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            if (!data.moveToFirst()) {
+                return;
+            }
+
+            String dateString = Utility.formatDate(
+                    data.getLong(WeatherContract.COL_WEATHER_DATE));
+
+            String weatherDescription =
+                    data.getString(WeatherContract.COL_WEATHER_DESC);
+
+            boolean isMetric = Utility.isMetric(getActivity());
+
+            String high = Utility.formatTemperature(
+                    data.getDouble(WeatherContract.COL_WEATHER_MAX_TEMP), isMetric);
+
+            String low = Utility.formatTemperature(
+                    data.getDouble(WeatherContract.COL_WEATHER_MIN_TEMP), isMetric);
+
+            forecast= String.format("%s - %s - %s/%s", dateString, weatherDescription, high, low);
+
+            mTextView.setText(forecast);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
 
         }
     }
