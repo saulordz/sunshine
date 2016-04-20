@@ -165,8 +165,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 data.getDouble(WeatherContract.COL_WEATHER_MIN_TEMP), isMetric);
         mTextViewMinTemp.setText(low);
 
-        String condition = data.getString(WeatherContract.COL_WEATHER_CONDITION_ID);
-        mImageView.setImageResource(R.mipmap.ic_launcher);
+        int condition = data.getInt(WeatherContract.COL_WEATHER_CONDITION_ID);
+        mImageView.setImageResource(Utility.getArtResourceForWeatherCondition(condition));
 
         String humidity = "Humidity " + data.getString(WeatherContract.COL_WEATHER_HUMIDITY) + "%";
         mTextViewHumidity.setText(humidity);
