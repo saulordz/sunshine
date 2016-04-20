@@ -165,11 +165,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 data.getDouble(WeatherContract.COL_WEATHER_MIN_TEMP), isMetric);
         mTextViewMinTemp.setText(low);
 
+        String condition = data.getString(WeatherContract.COL_WEATHER_CONDITION_ID);
         mImageView.setImageResource(R.mipmap.ic_launcher);
-//            String humidity = "Humidity " + data.getString(WeatherContract.COL_WEATHER)
-//            String wind = data.getString(WeatherContract.COL_);
-//            String pressure
-//            mTextView.setText(forecast);
+
+        String humidity = "Humidity " + data.getString(WeatherContract.COL_WEATHER_HUMIDITY) + "%";
+        mTextViewHumidity.setText(humidity);
+
+        Float wind = data.getFloat(WeatherContract.COL_WEATHER_WIND_SPEED);
+        Float windDirection = data.getFloat(WeatherContract.COL_WIND_DEGREES);
+        mTextViewWind.setText(Utility.getFormattedWind(getActivity(), wind, windDirection));
+
+        String pressure = data.getString(WeatherContract.COL_WEATHER_PRESSURE);
+        mTextViewPressure.setText("Pressure: " + pressure + "hPa");
 
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(getShareIntent());

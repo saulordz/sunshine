@@ -95,7 +95,7 @@ public class WeatherContract {
         public static final String COLUMN_WIND_SPEED = "wind";
 
         // Degrees are meteorological degrees (e.g, 0 is north, 180 is south).  Stored as floats.
-        public static final String COLUMN_DEGREES = "degrees";
+        public static final String COLUMN_WIND_DEGREES = "degrees";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_WEATHER).build();
@@ -158,6 +158,10 @@ public class WeatherContract {
             WeatherContract.WeatherEntry.COLUMN_SHORT_DESC,
             WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
             WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,
+            WeatherContract.WeatherEntry.COLUMN_HUMIDITY,
+            WeatherContract.WeatherEntry.COLUMN_WIND_SPEED,
+            WeatherContract.WeatherEntry.COLUMN_WIND_DEGREES,
+            WeatherContract.WeatherEntry.COLUMN_PRESSURE,
             WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING,
             WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
             WeatherContract.LocationEntry.COLUMN_COORD_LAT,
@@ -171,9 +175,13 @@ public class WeatherContract {
     public static final int COL_WEATHER_DESC = 2;
     public static final int COL_WEATHER_MAX_TEMP = 3;
     public static final int COL_WEATHER_MIN_TEMP = 4;
-    public static final int COL_LOCATION_SETTING = 5;
-    public static final int COL_WEATHER_CONDITION_ID = 6;
-    public static final int COL_COORD_LAT = 7;
-    public static final int COL_COORD_LONG = 8;
+    public static final int COL_WEATHER_HUMIDITY = 5;
+    public static final int COL_WEATHER_WIND_SPEED = 6;
+    public static final int COL_WIND_DEGREES = 7;
+    public static final int COL_WEATHER_PRESSURE = 8;
+    public static final int COL_LOCATION_SETTING = 9;
+    public static final int COL_WEATHER_CONDITION_ID = 10;
+    public static final int COL_COORD_LAT = 11;
+    public static final int COL_COORD_LONG = 12;
 
 }
