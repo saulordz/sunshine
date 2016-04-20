@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
@@ -11,21 +12,28 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String FORECASTFRAGMENT_TAG = "forecast_fragment";
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    private ShareActionProvider mShareActionProvider;
     private String mLocation;
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.a_main_root_layout, new ForecastFragment(), FORECASTFRAGMENT_TAG)
-                    .commit();
-        }
-
         mLocation = Utility.getPreferredLocation(getApplicationContext());
+
+        if (findViewById(R.id.weather_detail_container) != null) {
+            mTwoPane = true;
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        } else {
+            mTwoPane = false;
+        }
     }
 
 
@@ -34,18 +42,22 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+
+        // Fetch and store ShareActionProvider
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
+        mShareActionProvider.setShareIntent(getShareIntent());
+
         return true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(mLocation.compareTo(Utility.getPreferredLocation(this)) != 0){
-            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
-            ff.onLocationChanged();
-            mLocation = Utility.getPreferredLocation(this);
-        }
-
+        ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
     }
 
     @Override
@@ -78,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
+    }
+
+    private Intent getShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        return shareIntent;
     }
 
 }

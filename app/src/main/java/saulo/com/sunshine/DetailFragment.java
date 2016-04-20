@@ -26,7 +26,6 @@ import saulo.com.sunshine.data.WeatherContract;
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String HASHTAG_POSTFIX = "#SunshineApp";
-    private ShareActionProvider mShareActionProvider;
 
     private TextView mTextViewDayName;
     private TextView mTextViewDate;
@@ -91,37 +90,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     }
 
-    private Intent getShareIntent() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        shareIntent.setType("text/plain");
-//            shareIntent.putExtra(Intent.EXTRA_TEXT,
-//                    forecast + " " + HASHTAG_POSTFIX);
-        return shareIntent;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
-
-        MenuItem item = menu.findItem(R.id.menu_item_share);
-
-        // Fetch and store ShareActionProvider
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-
-        mShareActionProvider.setShareIntent(getShareIntent());
-//            if (forecast != null) {
-//                mShareActionProvider.setShareIntent(getShareIntent());
-//            }
-
-    }
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         Intent intent = getActivity().getIntent();
-        if (intent == null) {
+        if (intent == null || intent.getData() == null) {
             return null;
         }
 
@@ -178,9 +151,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         String pressure = data.getString(WeatherContract.COL_WEATHER_PRESSURE);
         mTextViewPressure.setText("Pressure: " + pressure + "hPa");
 
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(getShareIntent());
-        }
+//        if (mShareActionProvider != null) {
+//            mShareActionProvider.setShareIntent(getShareIntent());
+//        }
     }
 
     @Override
