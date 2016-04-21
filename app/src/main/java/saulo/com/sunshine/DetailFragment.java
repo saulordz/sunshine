@@ -156,7 +156,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mTextViewWind.setText(Utility.getFormattedWind(getActivity(), wind, windDirection));
 
         String pressure = data.getString(WeatherContract.COL_WEATHER_PRESSURE);
-        mTextViewPressure.setText("Pressure: " + pressure + "hPa");
+        mTextViewPressure.setText("Pressure: " + pressure + " hPa");
 
 //        if (mShareActionProvider != null) {
 //            mShareActionProvider.setShareIntent(getShareIntent());

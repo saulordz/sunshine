@@ -1,81 +1,302 @@
+<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:fillViewport="true">-->
+
+<!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:orientation="horizontal"--><!--android:padding="16dp">-->
+
+<!--<LinearLayout--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:orientation="vertical">-->
+
+<!--&lt;!&ndash; Header: Day, Date &ndash;&gt;--><!--<TextView--><!--android:id="@+id/f_main_day_name_textview"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"/>-->
+
+<!--<TextView--><!--android:id="@+id/f_main_date_textview"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content" />-->
+
+<!--</LinearLayout>-->
+
+<!--&lt;!&ndash; Main content: high, low, art, weather state &ndash;&gt;--><!--<LinearLayout--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_marginLeft="16dp"--><!--android:orientation="vertical">-->
+
+<!--<TextView--><!--android:id="@+id/f_main_max_textview"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content" />-->
+
+<!--<TextView--><!--android:id="@+id/f_main_min_textview"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content" />-->
+
+<!--&lt;!&ndash; Humidity, wind, pressure &ndash;&gt;--><!--<TextView--><!--android:id="@+id/f_main_humidity_textview"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content" />-->
+
+<!--<TextView--><!--android:id="@+id/f_main_pressure_textview"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content" />-->
+
+<!--<TextView--><!--android:id="@+id/f_main_wind_textview"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content" />--><!--</LinearLayout>-->
+
+<!--<LinearLayout--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:gravity="center_horizontal"--><!--android:orientation="vertical">-->
+
+<!--<ImageView--><!--android:id="@+id/f_main_image_view"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content" />-->
+
+<!--<TextView--><!--android:id="@+id/f_main_condition_textview"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"/>--><!--</LinearLayout>--><!--</LinearLayout>--><!--</ScrollView>-->
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
 
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:padding="16dp">-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical">-->
+
+    <!--&lt;!&ndash; Header: Day, Date &ndash;&gt;-->
+    <!--<TextView-->
+    <!--android:id="@+id/detail_day_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"/>-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/detail_date_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <!--</LinearLayout>-->
+
+    <!--&lt;!&ndash; Main content: high, low, art, weather state &ndash;&gt;-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/detail_high_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/detail_low_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <!--&lt;!&ndash; Humidity, wind, pressure &ndash;&gt;-->
+    <!--<TextView-->
+    <!--android:id="@+id/detail_humidity_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/detail_pressure_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/detail_wind_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center_horizontal"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/detail_icon"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/detail_forecast_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"/>-->
+    <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--&lt;!&ndash; Info layout&ndash;&gt;-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical">-->
+
+    <!--&lt;!&ndash; Header: Day, Date &ndash;&gt;-->
+    <!--<TextView-->
+    <!--android:id="@+id/f_main_day_name_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:fontFamily="sans-serif-condensed"-->
+    <!--android:textAppearance="?android:textAppearanceLarge" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/f_main_date_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:fontFamily="sans-serif-condensed"-->
+    <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+
+    <!--<TextView-->
+    <!--android:id="@+id/f_main_max_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:fontFamily="sans-serif-condensed"-->
+    <!--android:textSize="50dp" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/f_main_min_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:fontFamily="sans-serif-condensed"-->
+    <!--android:textSize="30dp" />-->
+
+    <!--&lt;!&ndash; Humidity, wind, pressure &ndash;&gt;-->
+    <!--<TextView-->
+    <!--android:id="@+id/f_main_humidity_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:fontFamily="sans-serif-condensed"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/f_main_pressure_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:fontFamily="sans-serif-condensed"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/f_main_wind_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:fontFamily="sans-serif-condensed"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--</LinearLayout>-->
+
+    <!--&lt;!&ndash; Icon layout&ndash;&gt;-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:orientation="vertical"-->
+    <!--android:gravity="center">-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/f_main_image_view"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/f_main_condition_textview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+    <!--</LinearLayout>-->
+
+    <!--</LinearLayout>-->
+
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:padding="16dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/f_main_day_name_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceLarge" />
 
-            <!-- Header: Day, Date -->
-            <TextView
-                android:id="@+id/f_main_day_name_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/f_main_date_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <!-- Main content: high, low, art, weather state -->
-        <LinearLayout
+        <TextView
+            android:id="@+id/f_main_date_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/f_main_max_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/f_main_min_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <!-- Humidity, wind, pressure -->
-            <TextView
-                android:id="@+id/f_main_humidity_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/f_main_pressure_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/f_main_wind_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceMedium" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/f_main_image_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/f_main_condition_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/f_main_max_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="50dp" />
+
+                <TextView
+                    android:id="@+id/f_main_min_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="30dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/f_main_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/f_main_condition_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/f_main_humidity_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/f_main_pressure_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/f_main_wind_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold" />
+
+
     </LinearLayout>
+
 </ScrollView>
