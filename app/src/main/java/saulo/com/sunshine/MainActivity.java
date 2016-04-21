@@ -3,6 +3,7 @@ package saulo.com.sunshine;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
@@ -28,10 +29,11 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         if (findViewById(R.id.weather_detail_container) != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
-                        .commit();
-                Log.d(TAG, "onCreate: ");
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+                ft.setCustomAnimations(R.anim.fragment_enter, R.anim.fragment_exit, R.anim.fragment_pop_enter, R.anim.fragment_pop_exit);
+                ft.replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG);
+                ft.commit();
             }
         } else {
             mTwoPane = false;
@@ -129,9 +131,12 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(args);
 
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
-                    .commit();
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.fragment_enter, R.anim.fragment_exit, R.anim.fragment_pop_enter, R.anim.fragment_pop_exit);
+            ft.replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG);
+            ft.commit();
+
 
         } else {
             Intent intent = new Intent(this, DetailActivity.class)

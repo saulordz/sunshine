@@ -38,7 +38,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private static final String SELECTED_KEY = "selected_position";
 
     public interface CallbackForecastFragment {
-        public void onItemSelected(Uri uri);
+        void onItemSelected(Uri uri);
     }
 
     public ForecastFragment() {
@@ -102,17 +102,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_refresh) {
-            updateWeather();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String locationSetting = getPreferredLocation(getActivity());
 
@@ -131,11 +120,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
-        Log.d(TAG, "onLoadFinished: 3");
         if (mPosition != ListView.INVALID_POSITION) {
-            // If we don't need to restart the loader, and there's a desired position to restore
-            // to, do so now.
-            Log.d(TAG, "onLoadFinished: " + mPosition);
             mListView.setSelection(mPosition);
         }
     }
