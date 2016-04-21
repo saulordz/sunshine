@@ -75,6 +75,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
+        Log.d(TAG, "onCreateView: ");
         mTextViewDayName = (TextView) rootView.findViewById(R.id.f_main_day_name_textview);
         mTextViewDate = (TextView) rootView.findViewById(R.id.f_main_date_textview);
         mTextViewMinTemp = (TextView) rootView.findViewById(R.id.f_main_min_textview);
@@ -116,6 +117,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+        Log.d(TAG, "onLoadFinished: ");
         if (!data.moveToFirst()) {
 
             return;

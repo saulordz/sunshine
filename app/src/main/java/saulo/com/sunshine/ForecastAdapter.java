@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import saulo.com.sunshine.data.WeatherContract;
 
 /**
@@ -20,6 +18,8 @@ public class ForecastAdapter extends CursorAdapter {
 
     private final static int VIEW_TYPE_TODAY = 0;
     private final static int VIEW_TYPE_REGULAR = 1;
+    private boolean mUseTodayLayout = true;
+
     public ForecastAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
@@ -33,12 +33,13 @@ public class ForecastAdapter extends CursorAdapter {
         return highLowStr;
     }
 
+    public void setUseTodayLayout(boolean useTodayLayout) {
+        mUseTodayLayout = useTodayLayout;
+    }
+
     @Override
     public int getItemViewType(int position) {
-        if(position == 0){
-            return VIEW_TYPE_TODAY;
-        }
-        return VIEW_TYPE_REGULAR;
+        return (position == 0 && mUseTodayLayout) ? VIEW_TYPE_TODAY : VIEW_TYPE_REGULAR;
     }
 
     @Override
@@ -67,10 +68,9 @@ public class ForecastAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         int viewType = getItemViewType(cursor.getPosition());
         int layoutId = -1;
-        if(viewType == VIEW_TYPE_TODAY){
+        if (viewType == VIEW_TYPE_TODAY) {
             layoutId = R.layout.list_item_forecast_today;
-        }
-        else {
+        } else {
             layoutId = R.layout.list_item_forecast;
         }
 
@@ -92,9 +92,9 @@ public class ForecastAdapter extends CursorAdapter {
         // Read weather icon ID from cursor
         int weatherId = cursor.getInt(WeatherContract.COL_WEATHER_CONDITION_ID);
         // Use placeholder image for now
-        if(getItemViewType(cursor.getPosition()) == VIEW_TYPE_TODAY){
+        if (getItemViewType(cursor.getPosition()) == VIEW_TYPE_TODAY) {
             viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
-        }else{
+        } else {
             viewHolder.iconView.setImageResource(Utility.getIconResourceForWeatherCondition(weatherId));
         }
 
