@@ -73,7 +73,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mAdapter = new ForecastAdapter(getActivity(), null, 0);
-        SunshineSyncAdapter.syncImmediately(getContext());
+        updateWeather();
 
         mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
         mListView.setAdapter(mAdapter);
@@ -102,6 +102,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void updateWeather() {
+        SunshineSyncAdapter.syncImmediately(getContext());
 //        Log.d(TAG, "updateWeather: ");
 //        Intent alarmIntent = new Intent(getActivity(), SunshineService.AlarmReceiver.class);
 //        alarmIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA, Utility.getPreferredLocation(getActivity()));
