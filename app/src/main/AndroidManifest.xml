@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="saulo.com.sunshine">
 
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -36,8 +37,7 @@
             android:name=".data.WeatherProvider"
             android:authorities="saulo.com.sunshine" />
 
-        <receiver android:name=".service.SunshineService$AlarmReceiver" android:enabled="true"/>
-
+        <receiver android:name=".services.SunshineService$AlarmReceiver" android:enabled="true"/>
         <service android:name=".services.SunshineService"/>
     </application>
 

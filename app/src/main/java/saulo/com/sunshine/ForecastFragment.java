@@ -72,6 +72,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mAdapter = new ForecastAdapter(getActivity(), null, 0);
+        updateWeather();
 
         mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
         mListView.setAdapter(mAdapter);

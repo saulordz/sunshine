@@ -329,10 +329,10 @@ public class SunshineService extends IntentService {
     public static class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive: Broadcast!1");
             Intent sendIntent = new Intent(context, SunshineService.class);
             sendIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA, intent.getStringExtra(SunshineService.LOCATION_QUERY_EXTRA));
             context.startService(sendIntent);
-
         }
     }
 
