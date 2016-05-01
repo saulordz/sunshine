@@ -32,5 +32,7 @@
     <!-- Strings related to Notification preference -->
     <string name="pref_last_notification">last_notification
     </string>
+    <string name="preference_notification_title">Enable notifications</string>
+    <string name="preference_notification_key">preference_notification_key</string>
 
 </resources>

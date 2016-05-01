@@ -9,12 +9,16 @@
         android:title="@string/pref_location_text" />
 
     <ListPreference
+        android:defaultValue="0"
         android:entries="@array/preference_units_entries"
         android:entryValues="@array/preference_units_values"
-        android:title="@string/preference_units_title"
         android:key="@string/pref_units_key"
-        android:defaultValue="0"/>
+        android:title="@string/preference_units_title" />
 
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/preference_notification_key"
+        android:title="@string/preference_notification_title" />
 
 
 </PreferenceScreen>

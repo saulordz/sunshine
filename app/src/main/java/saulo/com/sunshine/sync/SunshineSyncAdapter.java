@@ -494,7 +494,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                         (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                 // mId allows you to update the notification later on.
                 mNotificationManager.notify(0, mBuilder.build());
-                Log.d(TAG, "notifyWeather: ");
 
                 //refreshing last sync
                 SharedPreferences.Editor editor = prefs.edit();
