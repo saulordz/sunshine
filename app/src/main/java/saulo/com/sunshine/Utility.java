@@ -16,7 +16,7 @@ public class Utility  {
 
     public static final String DATE_FORMAT = "yyyyMMdd";
 
-    public static boolean isNotificationEnable(Context context){
+    public static boolean isNotificationsEnabled(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean(context.getString(R.string.preference_notification_key),
                 true);
@@ -34,14 +34,13 @@ public class Utility  {
                 .equals(context.getString(R.string.pref_metric));
     }
 
-    static String formatTemperature(Context context, double temperature, boolean isMetric) {
-        double temp;
-        if ( !isMetric ) {
-            temp = 9*temperature/5+32;
-        } else {
-            temp = temperature;
+    public static String formatTemperature(Context context, double temperature) {
+        if (!isMetric(context)) {
+            temperature = (temperature * 1.8) + 32;
         }
-        return context.getString(R.string.format_temperature, temp);
+
+        // For presentation, assume the user doesn't care about tenths of a degree.
+        return String.format(context.getString(R.string.format_temperature), temperature);
     }
 
     static String formatDate(long dateInMillis) {
