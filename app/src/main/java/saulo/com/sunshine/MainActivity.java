@@ -93,27 +93,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             startActivity(intent);
             return true;
         }
-
-        if (id == R.id.action_show_map) {
-            showMap();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    public void showMap() {
-        String location = Utility.getPreferredLocation(this);
-
-        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
-                .appendQueryParameter("q", location)
-                .build();
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(geoLocation);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
     }
 
     private Intent getShareIntent() {
