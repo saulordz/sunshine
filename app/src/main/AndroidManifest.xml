@@ -39,13 +39,6 @@
                 android:value="saulo.com.sunshine.DetailActivity" />
         </activity>
 
-        <!--<provider-->
-            <!--android:name=".data.WeatherProvider"-->
-            <!--android:authorities="saulo.com.sunshine" />-->
-
-        <receiver android:name=".services.SunshineService$AlarmReceiver" android:enabled="true"/>
-        <service android:name=".services.SunshineService"/>
-
         <!-- SyncAdapter's dummy authentication service -->
         <service
             android:name=".sync.SunshineAuthenticatorService"

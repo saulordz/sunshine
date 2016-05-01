@@ -2,28 +2,18 @@ package saulo.com.sunshine.sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.text.format.Time;
 import android.util.Log;
 
@@ -39,7 +29,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Vector;
 
-import saulo.com.sunshine.MainActivity;
 import saulo.com.sunshine.R;
 import saulo.com.sunshine.Utility;
 import saulo.com.sunshine.data.WeatherContract;
@@ -49,7 +38,11 @@ import saulo.com.sunshine.data.WeatherContract;
  */
 public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = "SunshineSyncAdapterTAG_";
-    public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
+
+    // Interval at which to sync with the weather, in milliseconds.
+    // 60 seconds (1 minute)  180 = 3 hours
+    public static final int SYNC_INTERVAL = 60 * 180;
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
 
     public SunshineSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -57,7 +50,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        Log.d(LOG_TAG, "Starting sync");
+        Log.d(TAG, "Starting sync");
         String locationQuery = Utility.getPreferredLocation(getContext());
 
         // These two need to be declared outside the try/catch
@@ -123,11 +116,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             forecastJsonStr = buffer.toString();
             getWeatherDataFromJson(forecastJsonStr, locationQuery);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
+            Log.e(TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
         } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
+            Log.e(TAG, e.getMessage(), e);
             e.printStackTrace();
         } finally {
             if (urlConnection != null) {
@@ -137,7 +130,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 try {
                     reader.close();
                 } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
+                    Log.e(TAG, "Error closing stream", e);
                 }
             }
         }
@@ -214,7 +207,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             // now we work exclusively in UTC
             dayTime = new Time();
 
-            for(int i = 0; i < weatherArray.length(); i++) {
+            for (int i = 0; i < weatherArray.length(); i++) {
                 // These are the values that will be collected.
                 long dateTime;
                 double pressure;
@@ -232,7 +225,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 JSONObject dayForecast = weatherArray.getJSONObject(i);
 
                 // Cheating to convert this to UTC time, which is what we want anyhow
-                dateTime = dayTime.setJulianDay(julianStartDay+i);
+                dateTime = dayTime.setJulianDay(julianStartDay + i);
 
                 pressure = dayForecast.getDouble(OWM_PRESSURE);
                 humidity = dayForecast.getInt(OWM_HUMIDITY);
@@ -270,7 +263,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
             int inserted = 0;
             // add to database
-            if ( cVVector.size() > 0 ) {
+            if (cVVector.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
                 getContext().getContentResolver().bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, cvArray);
@@ -278,110 +271,19 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 // delete old data so we don't build up an endless history
                 getContext().getContentResolver().delete(WeatherContract.WeatherEntry.CONTENT_URI,
                         WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?",
-                        new String[] {Long.toString(dayTime.setJulianDay(julianStartDay-1))});
+                        new String[]{Long.toString(dayTime.setJulianDay(julianStartDay - 1))});
 
 //                notifyWeather();
             }
 
-            Log.d(LOG_TAG, "Sync Complete. " + cVVector.size() + " Inserted");
+            Log.d(TAG, "Sync Complete. " + cVVector.size() + " Inserted");
 
         } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
+            Log.e(TAG, e.getMessage(), e);
             e.printStackTrace();
         }
     }
 
-//    private void notifyWeather() {
-//        Context context = getContext();
-//        //checking the last update and notify if it' the first of the day
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//        String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
-//        boolean displayNotifications = prefs.getBoolean(displayNotificationsKey,
-//                Boolean.parseBoolean(context.getString(R.string.pref_enable_notifications_default)));
-//
-//        if ( displayNotifications ) {
-//
-//            String lastNotificationKey = context.getString(R.string.pref_last_notification);
-//            long lastSync = prefs.getLong(lastNotificationKey, 0);
-//
-//            if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
-//                // Last sync was more than 1 day ago, let's send a notification with the weather.
-//                String locationQuery = Utility.getPreferredLocation(context);
-//
-//                Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationQuery, System.currentTimeMillis());
-//
-//                // we'll query our contentProvider, as always
-//                Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_WEATHER_PROJECTION, null, null, null);
-//
-//                if (cursor.moveToFirst()) {
-//                    int weatherId = cursor.getInt(INDEX_WEATHER_ID);
-//                    double high = cursor.getDouble(INDEX_MAX_TEMP);
-//                    double low = cursor.getDouble(INDEX_MIN_TEMP);
-//                    String desc = cursor.getString(INDEX_SHORT_DESC);
-//
-//                    int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
-//                    Resources resources = context.getResources();
-//                    Bitmap largeIcon = BitmapFactory.decodeResource(resources,
-//                            Utility.getArtResourceForWeatherCondition(weatherId));
-//                    String title = context.getString(R.string.app_name);
-//
-//                    // Define the text of the forecast.
-//                    String contentText = String.format(context.getString(R.string.format_notification),
-//                            desc,
-//                            Utility.formatTemperature(context, high),
-//                            Utility.formatTemperature(context, low));
-//
-//                    // NotificationCompatBuilder is a very convenient way to build backward-compatible
-//                    // notifications.  Just throw in some data.
-//                    NotificationCompat.Builder mBuilder =
-//                            new NotificationCompat.Builder(getContext())
-//                                    .setColor(resources.getColor(R.color.sunshine_light_blue))
-//                                    .setSmallIcon(iconId)
-//                                    .setLargeIcon(largeIcon)
-//                                    .setContentTitle(title)
-//                                    .setContentText(contentText);
-//
-//                    // Make something interesting happen when the user clicks on the notification.
-//                    // In this case, opening the app is sufficient.
-//                    Intent resultIntent = new Intent(context, MainActivity.class);
-//
-//                    // The stack builder object will contain an artificial back stack for the
-//                    // started Activity.
-//                    // This ensures that navigating backward from the Activity leads out of
-//                    // your application to the Home screen.
-//                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-//                    stackBuilder.addNextIntent(resultIntent);
-//                    PendingIntent resultPendingIntent =
-//                            stackBuilder.getPendingIntent(
-//                                    0,
-//                                    PendingIntent.FLAG_UPDATE_CURRENT
-//                            );
-//                    mBuilder.setContentIntent(resultPendingIntent);
-//
-//                    NotificationManager mNotificationManager =
-//                            (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-//                    // WEATHER_NOTIFICATION_ID allows you to update the notification later on.
-//                    mNotificationManager.notify(WEATHER_NOTIFICATION_ID, mBuilder.build());
-//
-//                    //refreshing last sync
-//                    SharedPreferences.Editor editor = prefs.edit();
-//                    editor.putLong(lastNotificationKey, System.currentTimeMillis());
-//                    editor.commit();
-//                }
-//                cursor.close();
-//            }
-//        }
-//    }
-
-    /**
-     * Helper method to handle insertion of a new location in the weather database.
-     *
-     * @param locationSetting The location string used to request updates from the server.
-     * @param cityName A human-readable city name, e.g "Mountain View"
-     * @param lat the latitude of the city
-     * @param lon the longitude of the city
-     * @return the row ID of the added location.
-     */
     long addLocation(String locationSetting, String cityName, double lat, double lon) {
         long locationId;
 
@@ -444,6 +346,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     /**
      * Helper method to have the sync adapter sync immediately
+     *
      * @param context The context used to access the account service
      */
     public static void syncImmediately(Context context) {
@@ -455,14 +358,28 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(TAG, "syncImmediately: ");
     }
 
-    /**
-     * Helper method to get the fake account to be used with SyncAdapter, or make a new one
-     * if the fake account doesn't exist yet.  If we make a new account, we call the
-     * onAccountCreated method so we can initialize things.
-     *
-     * @param context The context used to access the account service
-     * @return a fake account.
-     */
+
+    private static void onAccountCreated(Account newAccount, Context context) {
+        /*
+         * Since we've created an account
+         */
+        SunshineSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+
+        /*
+         * Without calling setSyncAutomatically, our periodic sync will not be enabled.
+         */
+        ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
+
+        /*
+         * Finally, let's do a sync to get things started
+         */
+        syncImmediately(context);
+    }
+
+    public static void initializeSyncAdapter(Context context) {
+        getSyncAccount(context);
+    }
+
     public static Account getSyncAccount(Context context) {
         // Get an instance of the Android account manager
         AccountManager accountManager =
@@ -473,7 +390,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 context.getString(R.string.app_name), context.getString(R.string.sync_account_type));
 
         // If the password doesn't exist, the account doesn't exist
-        if ( null == accountManager.getPassword(newAccount) ) {
+        if (null == accountManager.getPassword(newAccount)) {
 
         /*
          * Add the account and account type, no password or user data
@@ -489,6 +406,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
              * here.
              */
 
+            onAccountCreated(newAccount, context);
         }
         return newAccount;
     }

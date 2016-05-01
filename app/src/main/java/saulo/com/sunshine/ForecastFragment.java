@@ -1,16 +1,10 @@
 package saulo.com.sunshine;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import saulo.com.sunshine.data.WeatherContract;
-import saulo.com.sunshine.services.SunshineService;
 import saulo.com.sunshine.sync.SunshineSyncAdapter;
 
 import static saulo.com.sunshine.Utility.getPreferredLocation;

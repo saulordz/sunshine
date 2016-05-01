@@ -9,6 +9,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+import saulo.com.sunshine.sync.SunshineSyncAdapter;
+
 /**
  * Created by saulo on 4/16/16.
  */
@@ -62,6 +64,8 @@ public class SettingsActivity extends PreferenceActivity
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
         }
+
+        SunshineSyncAdapter.syncImmediately(this);
 
         return true;
     }
