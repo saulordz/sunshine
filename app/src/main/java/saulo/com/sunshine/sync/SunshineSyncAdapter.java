@@ -16,6 +16,7 @@ import saulo.com.sunshine.R;
  * Created by saulo on 5/1/16.
  */
 public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
+    private static final String TAG = "SunshineSyncAdapterTAG_";
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
 
     public SunshineSyncAdapter(Context context, boolean autoInitialize) {
@@ -38,6 +39,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         ContentResolver.requestSync(getSyncAccount(context),
                 context.getString(R.string.content_authority), bundle);
+        Log.d(TAG, "syncImmediately: ");
     }
 
     /**
