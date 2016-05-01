@@ -1,6 +1,5 @@
 package saulo.com.sunshine;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,13 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -29,7 +22,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private static final String HASHTAG_POSTFIX = "#SunshineApp";
     static final String DETAIL_URI = "detail_uri";
-    private static final String TAG = "DetailFragmentTAG_";
 
     private Uri mUri;
 
@@ -42,15 +34,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView mTextViewWind;
     private TextView mTextViewPressure;
     private ImageView mImageView;
-
-    private String dayName;
-    private String date;
-    private String minTemp;
-    private String maxTemp;
-    private String condition;
-    private String humidity;
-    private String wind;
-    private String pressure;
 
     public DetailFragment() {
 
@@ -75,7 +58,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        Log.d(TAG, "onCreateView: ");
         mTextViewDayName = (TextView) rootView.findViewById(R.id.f_main_day_name_textview);
         mTextViewDate = (TextView) rootView.findViewById(R.id.f_main_date_textview);
         mTextViewMinTemp = (TextView) rootView.findViewById(R.id.f_main_min_textview);
@@ -85,23 +67,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mTextViewWind = (TextView) rootView.findViewById(R.id.f_main_wind_textview);
         mTextViewPressure = (TextView) rootView.findViewById(R.id.f_main_pressure_textview);
         mImageView = (ImageView) rootView.findViewById(R.id.f_main_image_view);
-
-//            mTextView = (TextView) rootView.findViewById(R.id.f_detail_text_view);
-//            mTextView.setText(forecast);
         return rootView;
     }
 
-    private void initData() {
-
-    }
-
-    private void initViews() {
-
-    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if ( null != mUri ) {
+        if (null != mUri) {
             return new CursorLoader(
                     getActivity(),
                     mUri,
@@ -116,8 +88,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-        Log.d(TAG, "onLoadFinished: ");
         if (!data.moveToFirst()) {
 
             return;
@@ -158,12 +128,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         String pressure = data.getString(WeatherContract.COL_WEATHER_PRESSURE);
         mTextViewPressure.setText("Pressure: " + pressure + " hPa");
 
-//        if (mShareActionProvider != null) {
-//            mShareActionProvider.setShareIntent(getShareIntent());
-//        }
     }
 
-    public void onLocationChanged( String newLocation ) {
+    public void onLocationChanged(String newLocation) {
         // replace the uri, since the location has changed
         Uri uri = mUri;
         if (null != uri) {

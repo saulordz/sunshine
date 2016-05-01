@@ -1,8 +1,10 @@
 package saulo.com.sunshine.services;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -29,6 +31,7 @@ import saulo.com.sunshine.data.WeatherContract;
  */
 public class SunshineService extends IntentService {
 
+    private static final String TAG = "SunshineServiceTAG_";
     private ArrayAdapter<String> mForecastAdapter;
     public static final String LOCATION_QUERY_EXTRA = "location_extra";
     private final String LOG_TAG = SunshineService.class.getSimpleName();
@@ -203,6 +206,7 @@ public class SunshineService extends IntentService {
             dayTime = new Time();
 
             for (int i = 0; i < weatherArray.length(); i++) {
+                Log.d(TAG, "getWeatherDataFromJson: " + weatherArray.length());
                 // These are the values that will be collected.
                 long dateTime;
                 double pressure;
@@ -321,4 +325,15 @@ public class SunshineService extends IntentService {
         // Wait, that worked?  Yes!
         return locationId;
     }
+
+    public static class AlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent sendIntent = new Intent(context, SunshineService.class);
+            sendIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA, intent.getStringExtra(SunshineService.LOCATION_QUERY_EXTRA));
+            context.startService(sendIntent);
+
+        }
+    }
+
 }

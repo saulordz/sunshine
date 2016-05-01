@@ -36,6 +36,8 @@
             android:name=".data.WeatherProvider"
             android:authorities="saulo.com.sunshine" />
 
+        <receiver android:name=".service.SunshineService$AlarmReceiver" android:enabled="true"/>
+
         <service android:name=".services.SunshineService"/>
     </application>
 
