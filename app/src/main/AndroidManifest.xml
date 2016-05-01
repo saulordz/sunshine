@@ -36,6 +36,7 @@
             android:name=".data.WeatherProvider"
             android:authorities="saulo.com.sunshine" />
 
+        <service android:name=".services.SunshineService"/>
     </application>
 
 </manifest>
