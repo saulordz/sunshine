@@ -1,10 +1,11 @@
 package saulo.com.sunshine;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -27,7 +28,7 @@ import static saulo.com.sunshine.Utility.getPreferredLocation;
 /**
  * Created by saulo on 4/16/16.
  */
-public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final int WEATHER_LOADER_ID = 1001;
     private static final String SELECTED_KEY = "selected_position";
@@ -40,12 +41,33 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private View mEmptyListView;
     private boolean mUseTodayLayout;
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_location_status_key))) {
+            updateEmptyView();
+        }
+    }
+
 
     public interface CallbackForecastFragment {
         void onItemSelected(Uri uri);
     }
 
     public ForecastFragment() {
+    }
+
+    @Override
+    public void onResume() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        prefs.registerOnSharedPreferenceChangeListener(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        prefs.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
     }
 
     @Override
@@ -161,13 +183,26 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             mListView.setSelection(mPosition);
         }
 
-        if ( mAdapter.getCount() == 0 ) {
+    }
+
+    public void updateEmptyView() {
+        if (mAdapter.getCount() == 0) {
             TextView tv = (TextView) getView().findViewById(R.id.f_main_textview_empty_database);
-            if ( null != tv ) {
+            if (null != tv) {
                 // if cursor is empty, why? do we have an invalid location
-                String message = getString(R.string.empty_database);
-                if (!Utility.isNetworkAvailable(getActivity()) ) {
-                    message += "\n" + getString(R.string.no_network_error);
+                int message = R.string.empty_forecast_list;
+                @SunshineSyncAdapter.LocationStatus int location = Utility.getLocationStatus(getActivity());
+                switch (location) {
+                    case SunshineSyncAdapter.LOCATION_STATUS_SERVER_DOWN:
+                        message = R.string.empty_forecast_list_server_down;
+                        break;
+                    case SunshineSyncAdapter.LOCATION_STATUS_SERVER_INVALID:
+                        message = R.string.empty_forecast_list_server_error;
+                        break;
+                    default:
+                        if (!Utility.isNetworkAvailable(getActivity())) {
+                            message = R.string.empty_forecast_list_no_network;
+                        }
                 }
                 tv.setText(message);
             }

@@ -11,7 +11,7 @@
     <string name="pref_metric">Metric</string>
     <string name="pref_units_key">preference_unit_key</string>
     <string name="preference_units_title">Temperature units</string>
-    <string name="pref_location_status">location_status</string>
+    <string name="pref_location_status_key">location_status</string>
 
 
     <string name="action_show_map">Show Map</string>
@@ -39,7 +39,9 @@
     <string name="preference_notification_title">Enable notifications</string>
     <string name="preference_notification_key">preference_notification_key</string>
 
-    <string name="empty_database">No weather information available</string>
-    <string name="no_network_error">The network is not available to fetch weather data</string>
+    <string name="empty_forecast_list">No weather information available.</string>
+    <string name="empty_forecast_list_no_network">No weather information available. The network is not available to fetch weather data</string>
+    <string name="empty_forecast_list_server_down">No weather information available. The server is not returning data.</string>
+    <string name="empty_forecast_list_server_error">No weather information available. The server is not returning valid data. Please check for an updated version of Sunshine.</string>
 
 </resources>

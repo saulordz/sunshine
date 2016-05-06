@@ -23,8 +23,15 @@ public class Utility  {
     public static void setLocationStatus(Context context, @SunshineSyncAdapter.LocationStatus int locationStatus){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(context.getString(R.string.pref_location_status), locationStatus);
+        editor.putInt(context.getString(R.string.pref_location_status_key), locationStatus);
         editor.apply();
+    }
+
+    @SuppressWarnings("ResourceType")
+    public @SunshineSyncAdapter.LocationStatus
+    static int getLocationStatus(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getInt(context.getString(R.string.pref_location_status_key), SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);
     }
     public static boolean isNotificationsEnabled(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
