@@ -28,16 +28,16 @@ import static saulo.com.sunshine.Utility.getPreferredLocation;
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int WEATHER_LOADER_ID = 1001;
-
+    private static final String SELECTED_KEY = "selected_position";
     private static final String TAG = "ForecastFragmentTAG_";
 
     private ForecastAdapter mAdapter;
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
 
+    private View mEmptyListView;
     private boolean mUseTodayLayout;
 
-    private static final String SELECTED_KEY = "selected_position";
 
     public interface CallbackForecastFragment {
         void onItemSelected(Uri uri);
@@ -90,7 +90,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_show_map) {
-                     showMap();
+            showMap();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -104,9 +104,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mAdapter = new ForecastAdapter(getActivity(), null, 0);
         updateWeather();
 
+        mEmptyListView = rootView.findViewById(R.id.f_main_textview_empty_database);
         mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
         mListView.setAdapter(mAdapter);
 
+        mListView.setEmptyView(mEmptyListView);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

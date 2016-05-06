@@ -35,4 +35,6 @@
     <string name="preference_notification_title">Enable notifications</string>
     <string name="preference_notification_key">preference_notification_key</string>
 
+    <string name="empty_database">No weather information available</string>
+
 </resources>
