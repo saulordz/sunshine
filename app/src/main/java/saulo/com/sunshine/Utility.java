@@ -20,11 +20,18 @@ public class Utility  {
 
     public static final String DATE_FORMAT = "yyyyMMdd";
 
+    public static void resetLocationStatus(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(context.getString(R.string.pref_location_status_key), SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);
+        editor.commit();
+    }
+
     public static void setLocationStatus(Context context, @SunshineSyncAdapter.LocationStatus int locationStatus){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(context.getString(R.string.pref_location_status_key), locationStatus);
-        editor.apply();
+        editor.commit();
     }
 
     @SuppressWarnings("ResourceType")
