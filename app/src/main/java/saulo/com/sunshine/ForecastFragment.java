@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import saulo.com.sunshine.data.WeatherContract;
 import saulo.com.sunshine.sync.SunshineSyncAdapter;
@@ -104,11 +105,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mAdapter = new ForecastAdapter(getActivity(), null, 0);
         updateWeather();
 
-        mEmptyListView = rootView.findViewById(R.id.f_main_textview_empty_database);
         mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
-        mListView.setAdapter(mAdapter);
 
+        mEmptyListView = rootView.findViewById(R.id.f_main_textview_empty_database);
         mListView.setEmptyView(mEmptyListView);
+        mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -157,6 +158,18 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mAdapter.swapCursor(data);
         if (mPosition != ListView.INVALID_POSITION) {
             mListView.setSelection(mPosition);
+        }
+
+        if ( mAdapter.getCount() == 0 ) {
+            TextView tv = (TextView) getView().findViewById(R.id.f_main_textview_empty_database);
+            if ( null != tv ) {
+                // if cursor is empty, why? do we have an invalid location
+                int message = R.string.empty_database;
+                if (!Utility.isNetworkAvailable(getActivity()) ) {
+                    message = R.string.no_network_error;
+                }
+                tv.setText(message);
+            }
         }
     }
 

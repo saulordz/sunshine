@@ -36,5 +36,6 @@
     <string name="preference_notification_key">preference_notification_key</string>
 
     <string name="empty_database">No weather information available</string>
+    <string name="no_network_error">The network is not available to fetch weather data</string>
 
 </resources>
