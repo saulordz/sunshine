@@ -11,6 +11,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import saulo.com.sunshine.sync.SunshineSyncAdapter;
+
 /**
  * Created by saulo on 4/19/16.
  */
@@ -18,6 +20,12 @@ public class Utility  {
 
     public static final String DATE_FORMAT = "yyyyMMdd";
 
+    public static void setLocationStatus(Context context, @SunshineSyncAdapter.LocationStatus int locationStatus){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(context.getString(R.string.pref_location_status), locationStatus);
+        editor.apply();
+    }
     public static boolean isNotificationsEnabled(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean(context.getString(R.string.preference_notification_key),
