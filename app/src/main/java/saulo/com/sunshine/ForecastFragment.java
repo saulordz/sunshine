@@ -164,9 +164,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             TextView tv = (TextView) getView().findViewById(R.id.f_main_textview_empty_database);
             if ( null != tv ) {
                 // if cursor is empty, why? do we have an invalid location
-                int message = R.string.empty_database;
+                String message = getString(R.string.empty_database);
                 if (!Utility.isNetworkAvailable(getActivity()) ) {
-                    message = R.string.no_network_error;
+                    message += "\n" + getString(R.string.no_network_error);
                 }
                 tv.setText(message);
             }
