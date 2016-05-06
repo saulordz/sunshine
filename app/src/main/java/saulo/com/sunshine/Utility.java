@@ -24,14 +24,14 @@ public class Utility  {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(context.getString(R.string.pref_location_status_key), SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setLocationStatus(Context context, @SunshineSyncAdapter.LocationStatus int locationStatus){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(context.getString(R.string.pref_location_status_key), locationStatus);
-        editor.commit();
+        editor.apply();
     }
 
     @SuppressWarnings("ResourceType")
