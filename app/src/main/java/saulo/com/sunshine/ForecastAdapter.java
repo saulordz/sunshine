@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import saulo.com.sunshine.data.WeatherContract;
 
 /**
@@ -88,33 +90,49 @@ public class ForecastAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-        // Read weather icon ID from cursor
-        int weatherId = cursor.getInt(WeatherContract.COL_WEATHER_CONDITION_ID);
-        // Use placeholder image for now
-        if (getItemViewType(cursor.getPosition()) == VIEW_TYPE_TODAY) {
-            viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
-        } else {
-            viewHolder.iconView.setImageResource(Utility.getIconResourceForWeatherCondition(weatherId));
+
+        int viewType = getItemViewType(cursor.getPosition());
+        int conditionId = cursor.getInt(WeatherContract.COL_WEATHER_CONDITION_ID);
+        int fallbackIconId;
+        switch (viewType) {
+            case VIEW_TYPE_TODAY: {
+                // Get weather icon
+                fallbackIconId = Utility.getArtResourceForWeatherCondition(
+                        conditionId);
+                break;
+            }
+            default: {
+                // Get weather icon
+                fallbackIconId = Utility.getIconResourceForWeatherCondition(
+                        conditionId);
+                break;
+            }
         }
 
-        // TODO Read date from cursor
-        Long date = cursor.getLong(WeatherContract.COL_WEATHER_DATE);
-        viewHolder.dateView.setText(Utility.getFriendlyDayString(context, date));
+        Glide.with(mContext)
+                .load(Utility.getArtUrlForWeatherCondition(mContext, conditionId))
+                .error(fallbackIconId)
+                .crossFade()
+                .into(viewHolder.iconView);
 
-        // TODO Read weather forecast from cursor
-        String weather = cursor.getString(WeatherContract.COL_WEATHER_DESC);
-        viewHolder.weatherView.setText(weather);
+        // Read date from cursor
+        long dateInMillis = cursor.getLong(WeatherContract.COL_WEATHER_DATE);
+        // Find TextView and set formatted date on it
+        viewHolder.dateView.setText(Utility.getFriendlyDayString(context, dateInMillis));
 
-        // Read user preference for metric or imperial temperature units
-        boolean isMetric = Utility.isMetric(context);
+        // Get description from weather condition ID
+        String description = Utility.getStringForWeatherCondition(context, conditionId);
+        // Find TextView and set weather forecast on it
+        viewHolder.weatherView.setText(description);
 
         // Read high temperature from cursor
-        double high = cursor.getDouble(WeatherContract.COL_WEATHER_MAX_TEMP);
-        viewHolder.highView.setText(Utility.formatTemperature(mContext, high));
+        String high = Utility.formatTemperature(
+                context, cursor.getDouble(WeatherContract.COL_WEATHER_MAX_TEMP));
+        viewHolder.highView.setText(high);
 
-        // TODO Read low temperature from cursor
-        double low = cursor.getDouble(WeatherContract.COL_WEATHER_MIN_TEMP);
-        viewHolder.lowView.setText(Utility.formatTemperature(mContext, low));
+        // Read low temperature from cursor
+        String low = Utility.formatTemperature(context, cursor.getDouble(WeatherContract.COL_WEATHER_MIN_TEMP));
+        viewHolder.lowView.setText(low);
 
     }
 

@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
+
 import saulo.com.sunshine.data.WeatherContract;
 
 /**
@@ -105,8 +108,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 data.getString(WeatherContract.COL_WEATHER_DESC);
         mTextViewCondition.setText(weatherDescription);
 
-        boolean isMetric = Utility.isMetric(getActivity());
-
         String high = Utility.formatTemperature(getActivity(),
                 data.getDouble(WeatherContract.COL_WEATHER_MAX_TEMP));
         mTextViewMaxTemp.setText(high);
@@ -116,7 +117,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mTextViewMinTemp.setText(low);
 
         int condition = data.getInt(WeatherContract.COL_WEATHER_CONDITION_ID);
-        mImageView.setImageResource(Utility.getArtResourceForWeatherCondition(condition));
+        Glide.with(this)
+                .load(Utility.getArtUrlForWeatherCondition(getActivity(), condition))
+                .error(Utility.getArtResourceForWeatherCondition(condition))
+                .crossFade()
+                .into(mImageView);
+//        mImageView.setImageResource(Utility.getArtResourceForWeatherCondition(condition));
 
         String humidity = "Humidity " + data.getString(WeatherContract.COL_WEATHER_HUMIDITY) + "%";
         mTextViewHumidity.setText(humidity);
