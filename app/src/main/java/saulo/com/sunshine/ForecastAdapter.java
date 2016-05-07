@@ -113,6 +113,7 @@ public class ForecastAdapter extends CursorAdapter {
         }
 
         Glide.with(mContext)
+
                 .load(Utility.getArtUrlForWeatherCondition(mContext, conditionId))
                 .error(fallbackIconId)
                 .crossFade()

@@ -119,4 +119,7 @@
 
     <string name="condition_unknown">Unknown (<xliff:g id="low">%1$s</xliff:g>)</string>
 
+    <string name="gcm_defaultSenderId" translatable="false">165515085157</string>
+
+    <string name="gcm_weather_alert">Heads up: %1$s in %2$s!</string>
 </resources>

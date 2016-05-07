@@ -97,7 +97,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        Log.d(TAG, "Starting sync");
         String locationQuery = Utility.getPreferredLocation(getContext());
 
         // These two need to be declared outside the try/catch
@@ -344,7 +343,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 notifyWeather();
             }
 
-            Log.d(TAG, "Sync Complete. " + cVVector.size() + " Inserted");
             setLocationStatus(getContext(), LOCATION_STATUS_OK);
 
         } catch (JSONException e) {
@@ -425,7 +423,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         ContentResolver.requestSync(getSyncAccount(context),
                 context.getString(R.string.content_authority), bundle);
-        Log.d(TAG, "syncImmediately: ");
     }
 
 
@@ -546,7 +543,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                                 .setLargeIcon(largeIcon)
                                 .setContentTitle(title)
                                 .setContentText(contentText);
-
                 // Creates an explicit intent for an Activity in your app
                 Intent resultIntent = new Intent(getContext(), MainActivity.class);
 
