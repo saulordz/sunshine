@@ -3,6 +3,7 @@ package saulo.com.sunshine;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
 
 import saulo.com.sunshine.data.WeatherContract;
 
@@ -20,6 +22,7 @@ public class ForecastAdapter extends CursorAdapter {
 
     private final static int VIEW_TYPE_TODAY = 0;
     private final static int VIEW_TYPE_REGULAR = 1;
+    private static final String TAG = "ForecastAdapterTAG_";
     private boolean mUseTodayLayout = true;
 
     public ForecastAdapter(Context context, Cursor c, int flags) {

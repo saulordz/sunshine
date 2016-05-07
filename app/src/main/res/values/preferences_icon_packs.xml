@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="preference_icon_pack_values">
+        <item>@string/pref_icon_colored_value</item>
+        <item>@string/pref_icon_mono_value</item>
+    </string-array>
+    <string-array name="preference_icon_pack_entries">
+        <item>@string/pref_icon_colored_value</item>
+        <item>@string/pref_icon_mono_value</item>
+    </string-array>
+</resources>

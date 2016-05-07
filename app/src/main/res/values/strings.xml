@@ -13,6 +13,14 @@
     <string name="preference_units_title">Temperature units</string>
     <string name="pref_location_status_key">location_status</string>
 
+    <string name="pref_icon_pack_title">Icon pack</string>
+    <string name="pref_icon_pack_key">icon_pack</string>
+    <string name="pref_icon_colored_value">Colored</string>
+    <string name="pref_icon_mono_value">Mono</string>
+    <string name="pref_icon_colored_key">Colored</string>
+    <string name="pref_icon_mono_key">Mono</string>
+
+
 
     <string name="action_show_map">Show Map</string>
     <string name="today">Today</string>
@@ -48,7 +56,7 @@
     <string name="pref_location_error_description">Invalid Location (<xliff:g id="location_setting">%1$s</xliff:g>)"</string>
     <string name="pref_location_unknown_description">Validating Location... (<xliff:g id="location_setting">%1$s</xliff:g>)"</string>
 
-    <string name="format_art_url" translatable="false">https://raw.githubusercontent.com/udacity/Sunshine-Version-2/sunshine_master/app/src/main/res/drawable-xxhdpi/art_<xliff:g id="description">%s</xliff:g>.png</string>
+    <string name="format_art_url" translatable="false">https://raw.githubusercontent.com/udacity/sunshine_icons/master/Archive/<xliff:g id="icon_pack">%s</xliff:g>/art_<xliff:g id="description">%s</xliff:g>.png</string>
 
 
     <!-- Weather Conditions -->
