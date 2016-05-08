@@ -8,7 +8,7 @@
         style="@style/ForecastListStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp" />
+        />
 
     <TextView
         android:id="@+id/f_main_textview_empty_database"
