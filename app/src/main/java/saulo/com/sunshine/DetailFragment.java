@@ -28,7 +28,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private Uri mUri;
 
-    private TextView mTextViewDayName;
+//    private TextView mTextViewDayName;
     private TextView mTextViewDate;
     private TextView mTextViewMinTemp;
     private TextView mTextViewMaxTemp;
@@ -61,14 +61,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        mTextViewDayName = (TextView) rootView.findViewById(R.id.f_main_day_name_textview);
-        mTextViewDate = (TextView) rootView.findViewById(R.id.f_main_date_textview);
-        mTextViewMinTemp = (TextView) rootView.findViewById(R.id.f_main_min_textview);
-        mTextViewMaxTemp = (TextView) rootView.findViewById(R.id.f_main_max_textview);
-        mTextViewCondition = (TextView) rootView.findViewById(R.id.f_main_condition_textview);
-        mTextViewHumidity = (TextView) rootView.findViewById(R.id.f_main_humidity_textview);
-        mTextViewWind = (TextView) rootView.findViewById(R.id.f_main_wind_textview);
-        mTextViewPressure = (TextView) rootView.findViewById(R.id.f_main_pressure_textview);
+//        mTextViewDayName = (TextView) rootView.findViewById(R.id.f_main_day_name_textview);
+        mTextViewDate = (TextView) rootView.findViewById(R.id.f_main_textview_date);
+        mTextViewMinTemp = (TextView) rootView.findViewById(R.id.f_main_textview_min_temp);
+        mTextViewMaxTemp = (TextView) rootView.findViewById(R.id.f_main_textview_max_temp);
+        mTextViewCondition = (TextView) rootView.findViewById(R.id.f_main_textview_condition);
+        mTextViewHumidity = (TextView) rootView.findViewById(R.id.f_main_textview_humidity_detail);
+        mTextViewWind = (TextView) rootView.findViewById(R.id.f_main_textview_wind_detail);
+        mTextViewPressure = (TextView) rootView.findViewById(R.id.f_main_textview_pressure_detail);
         mImageView = (ImageView) rootView.findViewById(R.id.f_main_image_view);
         return rootView;
     }
@@ -96,9 +96,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             return;
         }
 
-        String nameOfTheDay = Utility.getFriendlyDayString(
-                getActivity(), data.getLong(WeatherContract.COL_WEATHER_DATE));
-        mTextViewDayName.setText(nameOfTheDay);
+//        String nameOfTheDay = Utility.getFriendlyDayString(
+//                getActivity(), data.getLong(WeatherContract.COL_WEATHER_DATE));
+//        mTextViewDayName.setText(nameOfTheDay);
 
         String dateString = Utility.formatDate(
                 data.getLong(WeatherContract.COL_WEATHER_DATE));
@@ -124,7 +124,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 .into(mImageView);
 //        mImageView.setImageResource(Utility.getArtResourceForWeatherCondition(condition));
 
-        String humidity = "Humidity " + data.getString(WeatherContract.COL_WEATHER_HUMIDITY) + "%";
+        String humidity = data.getString(WeatherContract.COL_WEATHER_HUMIDITY) + "%";
         mTextViewHumidity.setText(humidity);
 
         Float wind = data.getFloat(WeatherContract.COL_WEATHER_WIND_SPEED);
@@ -132,7 +132,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mTextViewWind.setText(Utility.getFormattedWind(getActivity(), wind, windDirection));
 
         String pressure = data.getString(WeatherContract.COL_WEATHER_PRESSURE);
-        mTextViewPressure.setText("Pressure: " + pressure + " hPa");
+        mTextViewPressure.setText(pressure + " hPa");
 
     }
 
