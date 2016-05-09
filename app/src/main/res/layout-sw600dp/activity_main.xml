@@ -64,7 +64,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@id/layout_center"
         android:layout_below="@id/appbar"
-        android:choiceMode="singleChoice" />
+        android:choiceMode="singleChoice"
+        app:autoSelectView="true"
+        />
 
     <!-- This is used to give the card the appropriate margin
          list_item_extra_padding +

@@ -1,8 +1,10 @@
 package saulo.com.sunshine;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +15,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +23,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
 import android.widget.TextView;
 
 import saulo.com.sunshine.data.WeatherContract;
@@ -40,8 +45,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private RecyclerView mRecyclerView;
     private int mPosition = RecyclerView.NO_POSITION;
 
+    private boolean mHoldForTransition, mAutoSelectView;
+    private int mChoiceMode;;
+
     private View mEmptyView;
     private boolean mUseTodayLayout;
+
+    private long mInitialSelectedDate = -1;
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -51,8 +61,19 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
 
+    @Override
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ForecastFragment,
+                0, 0);
+        mChoiceMode = a.getInt(R.styleable.ForecastFragment_android_choiceMode, AbsListView.CHOICE_MODE_NONE);
+        mAutoSelectView = a.getBoolean(R.styleable.ForecastFragment_autoSelectView, false);
+        mHoldForTransition = a.getBoolean(R.styleable.ForecastFragment_sharedElementTransitions, false);
+        a.recycle();
+    }
+
     public interface CallbackForecastFragment {
-        void onItemSelected(Uri uri);
+        void onItemSelected(Uri uri, ForecastAdapter.ForecastAdapterViewHolder vh);
     }
 
     public ForecastFragment() {
@@ -74,9 +95,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        if ( mHoldForTransition ) {
+            getActivity().supportPostponeEnterTransition();
+        }
 
         getLoaderManager().initLoader(WEATHER_LOADER_ID, null, this);
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -137,10 +161,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 ((CallbackForecastFragment) getActivity())
                         .onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
                                 locationSetting, date)
-                        );
+                        ,vh );
                 mPosition = vh.getAdapterPosition();
             }
-        }, mEmptyView);
+        }, mEmptyView, mChoiceMode);
         updateWeather();
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.f_main_recycler_view);
@@ -196,11 +220,59 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 sortOrder);
     }
 
+    public void setInitialSelectedDate(long initialSelectedDate) {
+        mInitialSelectedDate = initialSelectedDate;
+    }
+
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
         if (mPosition != RecyclerView.NO_POSITION) {
             mRecyclerView.smoothScrollToPosition(mPosition);
+        }
+
+
+        updateEmptyView();
+        if ( data.getCount() == 0 ) {
+            getActivity().supportStartPostponedEnterTransition();
+        } else {
+            mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    // Since we know we're going to get items, we keep the listener around until
+                    // we see Children.
+                    if (mRecyclerView.getChildCount() > 0) {
+                        mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        int position = mAdapter.getSelectedItemPosition();
+                        if (position == RecyclerView.NO_POSITION &&
+                                -1 != mInitialSelectedDate) {
+                            Cursor data = mAdapter.getCursor();
+                            int count = data.getCount();
+                            int dateColumn = data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE);
+                            for ( int i = 0; i < count; i++ ) {
+                                data.moveToPosition(i);
+                                if ( data.getLong(dateColumn) == mInitialSelectedDate ) {
+                                    position = i;
+                                    break;
+                                }
+                            }
+                        }
+                        if (position == RecyclerView.NO_POSITION) position = 0;
+                        // If we don't need to restart the loader, and there's a desired position to restore
+                        // to, do so now.
+                        mRecyclerView.smoothScrollToPosition(position);
+                        RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
+                        if (null != vh && mAutoSelectView) {
+                            mAdapter.selectView(vh);
+                        }
+                        if ( mHoldForTransition ) {
+                            getActivity().supportStartPostponedEnterTransition();
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
 
     }

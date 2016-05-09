@@ -2,6 +2,8 @@ package saulo.com.sunshine;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +28,14 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     private Context mContext;
     private Cursor mCursor;
     private View mEmptyView;
+    final private ItemChoiceManager mICM;
 
-    public ForecastAdapter(Context context, ForecastAdapterOnClickHandler mClickHandler, View mEmptyView) {
+    public ForecastAdapter(Context context, ForecastAdapterOnClickHandler mClickHandler, View mEmptyView, int choiceMode) {
         mContext = context;
         this.mClickHandler = mClickHandler;
         this.mEmptyView = mEmptyView;
+        mICM = new ItemChoiceManager(this);
+        mICM.setChoiceMode(choiceMode);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {
@@ -103,6 +108,8 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
                     .into(forecastAdapterViewHolder.iconView);
         }
 
+        ViewCompat.setTransitionName(forecastAdapterViewHolder.iconView, "iconView" + position);
+
         // Read date from cursor
         long dateInMillis = mCursor.getLong(WeatherContract.COL_WEATHER_DATE);
 
@@ -128,9 +135,24 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         double low = mCursor.getDouble(WeatherContract.COL_WEATHER_MIN_TEMP);
         String lowString = Utility.formatTemperature(mContext, low);
         forecastAdapterViewHolder.lowView.setText(lowString);
+
+        mICM.onBindViewHolder(forecastAdapterViewHolder, position);
     }
 
-    public static interface ForecastAdapterOnClickHandler {
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        mICM.onRestoreInstanceState(savedInstanceState);
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        mICM.onSaveInstanceState(outState);
+    }
+
+    public int getSelectedItemPosition() {
+        return mICM.getSelectedItemPosition();
+    }
+
+    public interface ForecastAdapterOnClickHandler {
         void onClick(Long date, ForecastAdapterViewHolder vh);
     }
 
@@ -157,6 +179,14 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
             mCursor.moveToPosition(adapterPosition);
             int dateColumnIndex = mCursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE);
             mClickHandler.onClick(mCursor.getLong(dateColumnIndex), this);
+            mICM.onClick(this);
+        }
+    }
+
+    public void selectView(RecyclerView.ViewHolder viewHolder) {
+        if ( viewHolder instanceof ForecastAdapterViewHolder ) {
+            ForecastAdapterViewHolder vfh = (ForecastAdapterViewHolder)viewHolder;
+            vfh.onClick(vfh.itemView);
         }
     }
 }
