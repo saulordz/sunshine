@@ -9,8 +9,14 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 /**
  * Created by saulo on 5/6/16.
@@ -32,6 +38,28 @@ public class LocationEditTextPreference extends EditTextPreference implements Te
         } finally {
             a.recycle();
         }
+
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(getContext());
+        if (resultCode == ConnectionResult.SUCCESS) {
+            // Add the get current location widget to our location preference
+            setWidgetLayoutResource(R.layout.pref_current_location);
+        }
+    }
+
+
+    @Override
+    protected View onCreateView(ViewGroup parent) {
+        View view = super.onCreateView(parent);
+        View currentLocation = view.findViewById(R.id.current_location);
+        currentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // We'll use a toast for now so that we can test our new preference widget.
+                Toast.makeText(getContext(), "Woo!", Toast.LENGTH_LONG).show();
+            }
+        });
+        return view;
     }
 
     @Override
