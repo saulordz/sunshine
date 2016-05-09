@@ -9,6 +9,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,8 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import saulo.com.sunshine.data.WeatherContract;
@@ -35,8 +35,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private static final String TAG = "ForecastFragmentTAG_";
 
     private ForecastAdapter mAdapter;
-    private ListView mListView;
-    private int mPosition = ListView.INVALID_POSITION;
+    private RecyclerView mRecyclerView;
+    private int mPosition = RecyclerView.NO_POSITION;
+    ;
 
     private View mEmptyListView;
     private boolean mUseTodayLayout;
@@ -125,27 +126,28 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mAdapter = new ForecastAdapter(getActivity(), null, 0);
+        mAdapter = new ForecastAdapter(getActivity());
         updateWeather();
 
-        mListView = (ListView) rootView.findViewById(R.id.f_main_list_view);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.f_main_recycler_view);
 
         mEmptyListView = rootView.findViewById(R.id.f_main_textview_empty_database);
-        mListView.setEmptyView(mEmptyListView);
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView adapterView, View view, int position, long l) {
-                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-                if (cursor != null) {
-                    String locationSetting = getPreferredLocation(getActivity());
-                    ((CallbackForecastFragment) getActivity()).onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
-                            locationSetting, cursor.getLong(WeatherContract.COL_WEATHER_DATE)));
-                }
-                mPosition = position;
-            }
-        });
+//        mRecyclerView.setEmptyView(mEmptyListView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mAdapter);
+//        mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView adapterView, View view, int position, long l) {
+//                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+//                if (cursor != null) {
+//                    String locationSetting = getPreferredLocation(getActivity());
+//                    ((CallbackForecastFragment) getActivity()).onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+//                            locationSetting, cursor.getLong(WeatherContract.COL_WEATHER_DATE)));
+//                }
+//                mPosition = position;
+//            }
+//        });
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
@@ -179,14 +181,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
-        if (mPosition != ListView.INVALID_POSITION) {
-            mListView.setSelection(mPosition);
+        if (mPosition != RecyclerView.NO_POSITION) {
+            mRecyclerView.smoothScrollToPosition(mPosition);
         }
 
     }
 
     public void updateEmptyView() {
-        if (mAdapter.getCount() == 0) {
+        if (mAdapter.getItemCount() == 0) {
             TextView tv = (TextView) getView().findViewById(R.id.f_main_textview_empty_database);
             if (null != tv) {
                 // if cursor is empty, why? do we have an invalid location
@@ -224,10 +226,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        // When tablets rotate, the currently selected list item needs to be saved.
-        // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
-        // so check for that before storing.
-        if (mPosition != ListView.INVALID_POSITION) {
+        if (mPosition != RecyclerView.NO_POSITION) {
             outState.putInt(SELECTED_KEY, mPosition);
         }
         super.onSaveInstanceState(outState);

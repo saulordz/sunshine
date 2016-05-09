@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/f_main_list_view"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/f_main_recycler_view"
         style="@style/ForecastListStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

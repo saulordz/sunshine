@@ -463,4 +463,10 @@ public class Utility  {
         return context.getString(stringId);
     }
 
+    public static boolean usingLocalGraphics(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String sunshineArtPack = context.getString(R.string.pref_icon_colored_key);
+        return prefs.getString(context.getString(R.string.pref_icon_pack_key),
+                sunshineArtPack).equals(sunshineArtPack);
+    }
 }
