@@ -127,4 +127,6 @@
     <string name="pressure_label">Pressure</string>
     <string name="wind_label">Wind</string>
 
+    <string name="detail_icon_transition_name" translatable="false">TN_DetailIcon</string>
+
 </resources>
