@@ -39,7 +39,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private int mPosition = RecyclerView.NO_POSITION;
     ;
 
-    private View mEmptyListView;
+    private View mEmptyView;
     private boolean mUseTodayLayout;
 
     @Override
@@ -126,28 +126,23 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mAdapter = new ForecastAdapter(getActivity());
+        mEmptyView = rootView.findViewById(R.id.f_main_textview_empty_database);
+        mAdapter= new ForecastAdapter(getActivity(), new ForecastAdapter.ForecastAdapterOnClickHandler() {
+            @Override
+            public void onClick(Long date, ForecastAdapter.ForecastAdapterViewHolder vh) {
+                String locationSetting = Utility.getPreferredLocation(getActivity());
+                ((CallbackForecastFragment) getActivity())
+                        .onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+                                locationSetting, date)
+                        );
+                mPosition = vh.getAdapterPosition();
+            }
+        }, mEmptyView);
         updateWeather();
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.f_main_recycler_view);
-
-        mEmptyListView = rootView.findViewById(R.id.f_main_textview_empty_database);
-//        mRecyclerView.setEmptyView(mEmptyListView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
-//        mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView adapterView, View view, int position, long l) {
-//                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-//                if (cursor != null) {
-//                    String locationSetting = getPreferredLocation(getActivity());
-//                    ((CallbackForecastFragment) getActivity()).onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
-//                            locationSetting, cursor.getLong(WeatherContract.COL_WEATHER_DATE)));
-//                }
-//                mPosition = position;
-//            }
-//        });
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);

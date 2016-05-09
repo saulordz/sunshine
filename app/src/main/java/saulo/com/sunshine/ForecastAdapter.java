@@ -20,13 +20,17 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     private final static int VIEW_TYPE_TODAY = 0;
     private final static int VIEW_TYPE_REGULAR = 1;
+    private final ForecastAdapterOnClickHandler mClickHandler;
     private static final String TAG = "ForecastAdapterTAG_";
     private boolean mUseTodayLayout = true;
     private Context mContext;
     private Cursor mCursor;
+    private View mEmptyView;
 
-    public ForecastAdapter(Context context) {
+    public ForecastAdapter(Context context, ForecastAdapterOnClickHandler mClickHandler, View mEmptyView) {
         mContext = context;
+        this.mClickHandler = mClickHandler;
+        this.mEmptyView = mEmptyView;
     }
 
     /**
@@ -55,6 +59,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
+        mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     public Cursor getCursor() {
@@ -133,7 +138,11 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         forecastAdapterViewHolder.lowView.setText(lowString);
     }
 
-    public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder {
+    public static interface ForecastAdapterOnClickHandler {
+        void onClick(Long date, ForecastAdapterViewHolder vh);
+    }
+
+    public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final ImageView iconView;
         public final TextView dateView;
         public final TextView weatherView;
@@ -147,6 +156,15 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
             weatherView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
             highView = (TextView) view.findViewById(R.id.list_item_high_textview);
             lowView = (TextView) view.findViewById(R.id.list_item_low_textview);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            mCursor.moveToPosition(adapterPosition);
+            int dateColumnIndex = mCursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE);
+            mClickHandler.onClick(mCursor.getLong(dateColumnIndex), this);
         }
     }
 }
