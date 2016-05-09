@@ -4,22 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/a_main_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/listPreferredItemHeight"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_logo"
-            android:scaleType="center"
-            android:background="@color/colorPrimary"/>
-    </android.support.v7.widget.Toolbar>
-
     <fragment xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/fragment_forecast"
         android:name="saulo.com.sunshine.ForecastFragment"
