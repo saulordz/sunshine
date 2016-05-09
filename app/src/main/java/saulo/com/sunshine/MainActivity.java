@@ -92,22 +92,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-
-        MenuItem item = menu.findItem(R.id.menu_item_share);
-
-        // Fetch and store ShareActionProvider
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-
-        mShareActionProvider.setShareIntent(getShareIntent());
-
-        return true;
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         String location = Utility.getPreferredLocation(this);
@@ -137,12 +121,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         return super.onOptionsItemSelected(item);
     }
 
-    private Intent getShareIntent() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        shareIntent.setType("text/plain");
-        return shareIntent;
-    }
 
     @Override
     public void onItemSelected(Uri uri) {
