@@ -131,4 +131,7 @@
 
     <string name="pref_current_location_desc">Use my location</string>
 
+    <string name="pref_location_latitude" translatable="false">loc-latitude</string>
+    <string name="pref_location_longitude" translatable="false">loc-longitude</string>
+
 </resources>

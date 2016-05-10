@@ -16,24 +16,48 @@ import saulo.com.sunshine.sync.SunshineSyncAdapter;
 /**
  * Created by saulo on 4/19/16.
  */
-public class Utility  {
+public class Utility {
 
     public static final String DATE_FORMAT = "yyyyMMdd";
+    private static final String TAG = "UtilityTAG_";
 
+    public static float DEFAULT_LATLONG = 0F;
 
-    public static String getIconPack(Context context){
+    public static boolean isLocationLatLonAvailable(Context context) {
+        SharedPreferences prefs
+                = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.contains(context.getString(R.string.pref_location_latitude))
+                && prefs.contains(context.getString(R.string.pref_location_longitude));
+    }
+
+    public static float getLocationLatitude(Context context) {
+        SharedPreferences prefs
+                = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getFloat(context.getString(R.string.pref_location_latitude),
+                DEFAULT_LATLONG);
+
+    }
+
+    public static float getLocationLongitude(Context context) {
+        SharedPreferences prefs
+                = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getFloat(context.getString(R.string.pref_location_longitude),
+                DEFAULT_LATLONG);
+    }
+
+    public static String getIconPack(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_icon_pack_key), context.getString(R.string.pref_icon_colored_value));
     }
 
-    public static void resetLocationStatus(Context context){
+    public static void resetLocationStatus(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(context.getString(R.string.pref_location_status_key), SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);
         editor.apply();
     }
 
-    public static void setLocationStatus(Context context, @SunshineSyncAdapter.LocationStatus int locationStatus){
+    public static void setLocationStatus(Context context, @SunshineSyncAdapter.LocationStatus int locationStatus) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(context.getString(R.string.pref_location_status_key), locationStatus);
@@ -41,17 +65,19 @@ public class Utility  {
     }
 
     @SuppressWarnings("ResourceType")
-    public @SunshineSyncAdapter.LocationStatus
-    static int getLocationStatus(Context context){
+    public
+    @SunshineSyncAdapter.LocationStatus
+    static int getLocationStatus(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getInt(context.getString(R.string.pref_location_status_key), SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);
     }
 
-    public static boolean isNotificationsEnabled(Context context){
+    public static boolean isNotificationsEnabled(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean(context.getString(R.string.preference_notification_key),
                 true);
     }
+
     public static String getPreferredLocation(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_location_key),
@@ -102,7 +128,7 @@ public class Utility  {
 //                    today,
 //                    getFormattedMonthDay(context, dateInMillis)));
             return today;
-        } else if ( julianDay < currentJulianDay + 7 ) {
+        } else if (julianDay < currentJulianDay + 7) {
             // If the input date is less than a week in the future, just return the day name.
             return getDayName(context, dateInMillis);
         } else {
@@ -116,7 +142,7 @@ public class Utility  {
      * Given a day, returns just the name to use for that day.
      * E.g "today", "tomorrow", "wednesday".
      *
-     * @param context Context to use for resource localization
+     * @param context      Context to use for resource localization
      * @param dateInMillis The date in milliseconds
      * @return
      */
@@ -130,7 +156,7 @@ public class Utility  {
         int currentJulianDay = Time.getJulianDay(System.currentTimeMillis(), t.gmtoff);
         if (julianDay == currentJulianDay) {
             return context.getString(R.string.today);
-        } else if ( julianDay == currentJulianDay +1 ) {
+        } else if (julianDay == currentJulianDay + 1) {
             return context.getString(R.string.tomorrow);
         } else {
             Time time = new Time();
@@ -143,12 +169,13 @@ public class Utility  {
 
     /**
      * Converts db date format to the format "Month day", e.g "June 24".
-     * @param context Context to use for resource localization
+     *
+     * @param context      Context to use for resource localization
      * @param dateInMillis The db formatted date string, expected to be of the form specified
-     *                in Utility.DATE_FORMAT
+     *                     in Utility.DATE_FORMAT
      * @return The day in the form of a string formatted "December 6"
      */
-    public static String getFormattedMonthDay(Context context, long dateInMillis ) {
+    public static String getFormattedMonthDay(Context context, long dateInMillis) {
         Time time = new Time();
         time.setToNow();
         SimpleDateFormat dbDateFormat = new SimpleDateFormat(Utility.DATE_FORMAT);
@@ -222,6 +249,7 @@ public class Utility  {
     /**
      * Helper method to provide the art resource id according to the weather condition id returned
      * by the OpenWeatherMap call.
+     *
      * @param weatherId from OpenWeatherMap API response
      * @return resource id for the corresponding image. -1 if no relation is found.
      */
@@ -256,7 +284,7 @@ public class Utility  {
 
     static public boolean isNetworkAvailable(Context c) {
         ConnectivityManager cm =
-                (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
@@ -267,27 +295,27 @@ public class Utility  {
         String iconPack = getIconPack(context);
 
         if (weatherId >= 200 && weatherId <= 232) {
-            return context.getString(R.string.format_art_url,iconPack, "storm");
+            return context.getString(R.string.format_art_url, iconPack, "storm");
         } else if (weatherId >= 300 && weatherId <= 321) {
-            return context.getString(R.string.format_art_url,iconPack, "light_rain");
+            return context.getString(R.string.format_art_url, iconPack, "light_rain");
         } else if (weatherId >= 500 && weatherId <= 504) {
-            return context.getString(R.string.format_art_url,iconPack, "rain");
+            return context.getString(R.string.format_art_url, iconPack, "rain");
         } else if (weatherId == 511) {
-            return context.getString(R.string.format_art_url,iconPack, "snow");
+            return context.getString(R.string.format_art_url, iconPack, "snow");
         } else if (weatherId >= 520 && weatherId <= 531) {
-            return context.getString(R.string.format_art_url,iconPack, "rain");
+            return context.getString(R.string.format_art_url, iconPack, "rain");
         } else if (weatherId >= 600 && weatherId <= 622) {
-            return context.getString(R.string.format_art_url,iconPack, "snow");
+            return context.getString(R.string.format_art_url, iconPack, "snow");
         } else if (weatherId >= 701 && weatherId <= 761) {
-            return context.getString(R.string.format_art_url,iconPack, "fog");
+            return context.getString(R.string.format_art_url, iconPack, "fog");
         } else if (weatherId == 761 || weatherId == 781) {
-            return context.getString(R.string.format_art_url,iconPack, "storm");
+            return context.getString(R.string.format_art_url, iconPack, "storm");
         } else if (weatherId == 800) {
-            return context.getString(R.string.format_art_url,iconPack, "clear");
+            return context.getString(R.string.format_art_url, iconPack, "clear");
         } else if (weatherId == 801) {
-            return context.getString(R.string.format_art_url,iconPack, "light_clouds");
+            return context.getString(R.string.format_art_url, iconPack, "light_clouds");
         } else if (weatherId >= 802 && weatherId <= 804) {
-            return context.getString(R.string.format_art_url,iconPack, "clouds");
+            return context.getString(R.string.format_art_url, iconPack, "clouds");
         }
         return null;
     }
@@ -300,7 +328,7 @@ public class Utility  {
             stringId = R.string.condition_2xx;
         } else if (weatherId >= 300 && weatherId <= 321) {
             stringId = R.string.condition_3xx;
-        } else switch(weatherId) {
+        } else switch (weatherId) {
             case 500:
                 stringId = R.string.condition_500;
                 break;

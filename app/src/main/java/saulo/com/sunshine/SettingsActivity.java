@@ -9,9 +9,12 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
 import saulo.com.sunshine.data.WeatherContract;
 import saulo.com.sunshine.sync.SunshineSyncAdapter;
@@ -23,6 +26,7 @@ public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     protected final static int PLACE_PICKER_REQUEST = 9090;
+    private static final String TAG = "SettingsActivityTAG_";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,6 +123,12 @@ public class SettingsActivity extends PreferenceActivity
         if (key.equals(getString(R.string.pref_location_key))) {
             // we've changed the location
             // first clear locationStatus
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(getString(R.string.pref_location_latitude));
+            editor.remove(getString(R.string.pref_location_longitude));
+            editor.commit();
+
             Utility.resetLocationStatus(this);
             SunshineSyncAdapter.syncImmediately(this);
         } else if (key.equals(getString(R.string.pref_units_key))) {
@@ -142,11 +152,34 @@ public class SettingsActivity extends PreferenceActivity
                 Place place = PlacePicker.getPlace(data, this);
                 String address = place.getAddress().toString();
 
+                LatLng latLong = place.getLatLng();
+
+                // If the provided place doesn't have an address, we'll form a display-friendly
+                // string from the latlng values.
+                if (TextUtils.isEmpty(address)) {
+                    address = String.format("(%.2f, %.2f)", latLong.latitude, latLong.longitude);
+                }
+
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(getString(R.string.pref_location_key), address);
+
+                editor.putFloat(getString(R.string.pref_location_latitude),
+                        (float) latLong.latitude);
+                editor.putFloat(getString(R.string.pref_location_longitude),
+                        (float) latLong.longitude);
+
                 editor.commit();
+
+                // Tell the SyncAdapter that we've changed the location, so that we can update
+                // our UI with new values. We need to do this manually because we are responding
+                // to the PlacePicker widget result here instead of allowing the
+                // LocationEditTextPreference to handle these changes and invoke our callbacks.
+                Preference locationPreference = findPreference(getString(R.string.pref_location_key));
+                setPreferenceSummary(locationPreference, address);
+                Utility.resetLocationStatus(this);
+                SunshineSyncAdapter.syncImmediately(this);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
