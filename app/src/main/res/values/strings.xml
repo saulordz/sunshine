@@ -141,4 +141,6 @@
     <!-- Strings related to Muzei Source -->
     <string name="muzei_description">Today\'s weather</string>
 
+    <!-- animation restriction preference -->
+    <string name="pref_should_animate">should_animate</string>
 </resources>

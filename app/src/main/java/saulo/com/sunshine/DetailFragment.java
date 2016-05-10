@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DecimalFormat;
+
 import saulo.com.sunshine.data.WeatherContract;
 
 /**
@@ -145,7 +147,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mTextViewWind.setText(Utility.getFormattedWind(getActivity(), wind, windDirection));
 
         String pressure = data.getString(WeatherContract.COL_WEATHER_PRESSURE);
-        mTextViewPressure.setText(pressure + " hPa");
+        DecimalFormat df = new DecimalFormat("000.00##");
+        String result = df.format(Double.parseDouble(pressure));
+        mTextViewPressure.setText(result + " hPa");
 
         AppCompatActivity activity = (AppCompatActivity)getActivity();
         Toolbar toolbarView = (Toolbar) getView().findViewById(R.id.toolbar);

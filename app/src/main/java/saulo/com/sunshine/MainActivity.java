@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String PROJECT_NUMBER = "165515085157";
 
+    private static int selectionCount = 0;
+
     private ShareActionProvider mShareActionProvider;
     private String mLocation;
     private boolean mTwoPane;
@@ -50,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             mTwoPane = true;
             if (savedInstanceState == null) {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-                ft.setCustomAnimations(R.anim.fragment_enter, R.anim.fragment_exit, R.anim.fragment_pop_enter, R.anim.fragment_pop_exit);
                 ft.replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG);
                 ft.commit();
             }
@@ -149,7 +149,11 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.fragment_enter, R.anim.fragment_exit, R.anim.fragment_pop_enter, R.anim.fragment_pop_exit);
+            if (selectionCount > 0) { //temporal workaround for bad animations
+                ft.setCustomAnimations(R.anim.fragment_enter, R.anim.fragment_exit, R.anim.fragment_pop_enter, R.anim.fragment_pop_exit);
+            } else {
+                selectionCount++;
+            }
             ft.replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG);
             ft.commit();
 
