@@ -115,6 +115,7 @@
             android:name=".gcm.RegistrationIntentService"
             android:exported="false"></service>
 
+
         <receiver
             android:name=".widget.TodayWidgetProvider"
             android:label="@string/title_widget_today" >
@@ -126,6 +127,7 @@
                 android:resource="@xml/widget_info_today" />
         </receiver>
         <service android:name=".widget.TodayWidgetIntentService" />
+
         <!-- Detail Widget -->
         <receiver
             android:name=".widget.DetailWidgetProvider"
