@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            if (selectionCount > 0) { //temporal workaround for bad animations
+            if (selectionCount > 1) { //temporal workaround for bad animations
                 ft.setCustomAnimations(R.anim.fragment_enter, R.anim.fragment_exit, R.anim.fragment_pop_enter, R.anim.fragment_pop_exit);
             } else {
                 selectionCount++;
