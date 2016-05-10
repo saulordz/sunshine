@@ -64,6 +64,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     public @interface LocationStatus {
     }
 
+    public static final String ACTION_DATA_UPDATED = "saulo.com.sunshine.app.ACTION_DATA_UPDATED";
+
     public static final int LOCATION_STATUS_OK = 0;
     public static final int LOCATION_STATUS_SERVER_DOWN = 1;
     public static final int LOCATION_STATUS_SERVER_INVALID = 2;

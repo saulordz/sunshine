@@ -134,4 +134,8 @@
     <string name="pref_location_latitude" translatable="false">loc-latitude</string>
     <string name="pref_location_longitude" translatable="false">loc-longitude</string>
 
+    <!-- Strings related to Widgets -->
+    <string name="title_widget_today">Sunshine Today</string>
+    <string name="title_widget_detail">Sunshine Details</string>
+
 </resources>
