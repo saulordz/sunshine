@@ -31,7 +31,6 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive: ");
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
         String messageType = gcm.getMessageType(intent);
@@ -50,12 +49,9 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
                     String weather = extras.getString(EXTRA_WEATHER);
                     String location = extras.getString(EXTRA_LOCATION);
                     String alert = "Heads up: " + weather + " in " + location + "!";
-
-                    Log.d(TAG, "onReceive: HeadsUP");
                     sendNotification(context, alert);
                 }
 
-                Log.i(LOG_TAG, "Received: " + extras.toString());
             }
         }
     }
@@ -63,7 +59,6 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with a GCM message.
     private void sendNotification(Context context, String msg) {
-        Log.d(TAG, "sendNotification: start!");
         mNotificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 

@@ -65,7 +65,6 @@ public class ItemChoiceManager {
         int position = vh.getAdapterPosition();
 
         if (position == RecyclerView.NO_POSITION) {
-            Log.d(LOG_TAG, "Unable to Set Item State");
             return;
         }
 

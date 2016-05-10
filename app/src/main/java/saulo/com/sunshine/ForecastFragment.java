@@ -130,8 +130,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(intent);
-                } else {
-                    Log.d(TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
                 }
             }
 

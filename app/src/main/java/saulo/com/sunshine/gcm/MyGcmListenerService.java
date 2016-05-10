@@ -65,7 +65,6 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message The alert message to be posted.
      */
     private void sendNotification(String message) {
-        Log.d(TAG, "sendNotification: notification starttttttttttt");
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent contentIntent =
@@ -86,6 +85,5 @@ public class MyGcmListenerService extends GcmListenerService {
                         .setPriority(NotificationCompat.PRIORITY_HIGH);
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-        Log.d(TAG, "sendNotification: Notification sent");
     }
 }
