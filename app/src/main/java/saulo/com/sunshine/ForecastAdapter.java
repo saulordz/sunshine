@@ -96,7 +96,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
                 defaultImage = Utility.getArtResourceForWeatherCondition(weatherId);
                 break;
             default:
-                defaultImage = Utility.getIconResourceForWeatherCondition(weatherId);
+                defaultImage = Utility.getArtResourceForWeatherCondition(weatherId);
         }
 
         if ( Utility.usingLocalGraphics(mContext) ) {

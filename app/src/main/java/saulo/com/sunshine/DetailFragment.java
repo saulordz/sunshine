@@ -198,8 +198,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private void finishCreatingMenu(Menu menu) {
         // Retrieve the share menu item
-        Log.d(TAG, "finishCreatingMenu: ");
-
         MenuItem menuItem = menu.findItem(R.id.menu_item_share);
 
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
@@ -209,8 +207,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        Log.d(TAG, "finishCreatingMenuasdasd: ");
         if ( getActivity() instanceof DetailActivity ){
             // Inflate the menu; this adds items to the action bar if it is present.
             inflater.inflate(R.menu.detail, menu);
