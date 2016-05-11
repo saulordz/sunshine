@@ -14,11 +14,12 @@
     <!-- Permissions required for Google Cloud Messaging -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <permission
-        android:name="saulo.com.sunshine.app.permission.C2D_MESSAGE"
+        android:name="saulo.com.sunshine.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="saulo.com.sunshine.app.permission.C2D_MESSAGE" />
+    <uses-permission android:name="saulo.com.sunshine.permission.C2D_MESSAGE" />
 
 
     <application
@@ -29,7 +30,8 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAnQhIrGyVINyno2piyLh_jPySQNVoVDUc"/>
+            android:value="AIzaSyAnQhIrGyVINyno2piyLh_jPySQNVoVDUc" />
+
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.Main">
@@ -38,11 +40,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="saulo.com.sunshine.MESSAGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".DetailActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.Details">
+            android:theme="@style/AppTheme.Details"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="saulo.com.sunshine.MainActivity" />
@@ -93,7 +100,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.example.android.sunshine.app" />
+                <category android:name="saulo.com.sunshine" />
             </intent-filter>
         </receiver>
 
@@ -118,12 +125,13 @@
 
         <receiver
             android:name=".widget.TodayWidgetProvider"
-            android:label="@string/title_widget_today" >
+            android:label="@string/title_widget_today">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.example.android.sunshine.app.ACTION_DATA_UPDATED" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info_today" />
         </receiver>
         <service android:name=".widget.TodayWidgetIntentService" />
@@ -131,31 +139,35 @@
         <!-- Detail Widget -->
         <receiver
             android:name=".widget.DetailWidgetProvider"
-            android:label="@string/title_widget_detail"
-            android:enabled="@bool/widget_detail_enabled" >
+            android:enabled="@bool/widget_detail_enabled"
+            android:label="@string/title_widget_detail">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.example.android.sunshine.app.ACTION_DATA_UPDATED" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info_detail" />
         </receiver>
+
         <service
             android:name=".widget.DetailWidgetRemoteViewsService"
             android:enabled="@bool/widget_detail_enabled"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <service android:name=".muzei.WeatherMuzeiSource"
+        <service
+            android:name=".muzei.WeatherMuzeiSource"
+            android:description="@string/muzei_description"
             android:icon="@drawable/ic_muzei"
-            android:label="@string/app_name"
-            android:description="@string/muzei_description" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="com.google.android.apps.muzei.api.MuzeiArtSource" />
             </intent-filter>
-            <meta-data android:name="color" android:value="@color/colorPrimary" />
+            <meta-data
+                android:name="color"
+                android:value="@color/colorPrimary" />
         </service>
-
     </application>
 
 </manifest>

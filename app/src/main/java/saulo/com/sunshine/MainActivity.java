@@ -19,6 +19,7 @@ import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.pushbots.push.Pushbots;
 
 import saulo.com.sunshine.gcm.RegistrationIntentService;
 import saulo.com.sunshine.sync.SunshineSyncAdapter;
@@ -75,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 startService(intent);
             }
         }
+
+        Pushbots.sharedInstance().init(this);
+//        Pushbots.sharedInstance().setCustomHandler(PushBotsReceiver.class);
     }
 
     private boolean checkPlayServices() {
@@ -110,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             }
             mLocation = location;
         }
+        selectionCount = 0;
     }
 
     @Override
