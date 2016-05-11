@@ -122,10 +122,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 data.getLong(WeatherContract.COL_WEATHER_DATE));
         mTextViewDate.setText(dateString);
 
-        String weatherDescription =
-                data.getString(WeatherContract.COL_WEATHER_DESC);
-        mTextViewCondition.setText(weatherDescription);
-
         String high = Utility.formatTemperature(getActivity(),
                 data.getDouble(WeatherContract.COL_WEATHER_MAX_TEMP));
         mTextViewMaxTemp.setText(high);
@@ -140,6 +136,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 .error(Utility.getArtResourceForWeatherCondition(condition))
                 .crossFade()
                 .into(mImageView);
+
+        String weatherDescription =
+                Utility.getStringForWeatherCondition(getActivity(), condition);
+
+        mTextViewCondition.setText(weatherDescription);
 
         String humidity = data.getString(WeatherContract.COL_WEATHER_HUMIDITY) + "%";
         mTextViewHumidity.setText(humidity);
