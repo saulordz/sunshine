@@ -114,6 +114,11 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             }
             mLocation = location;
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         selectionCount = 0;
     }
 
