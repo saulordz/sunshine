@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        sunshineRelease {
+            keyAlias 'sunshine-key'
+            keyPassword '3dresAn3'
+            storeFile file('/home/saulo/Documents/google-play-keys/saulordz-keystore')
+            storePassword '3dresAn3'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-
     defaultConfig {
         applicationId "saulo.com.sunshine"
         minSdkVersion 16
@@ -15,6 +22,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.sunshineRelease
         }
     }
 }
@@ -24,24 +32,14 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:support-annotations:23.2.0'
     compile 'com.android.support:appcompat-v7:23.2.1'
-
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.android.support:support-v4:23.1.0'
-
-    compile "com.google.android.gms:play-services-gcm:8.4.0"
-
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
     compile 'com.android.support:gridlayout-v7:23.1.0'
-
     compile 'com.android.support:cardview-v7:23.1.1'
-
     compile 'com.android.support:recyclerview-v7:23.1.1'
-
     compile 'com.android.support:design:23.2.0'
-
     compile 'com.google.android.gms:play-services-location:8.4.0'
-
     compile 'com.google.android.apps.muzei:muzei-api:2.0'
-
     compile 'com.pushbots:pushbots-lib:2.0.13@aar'
-
 }
