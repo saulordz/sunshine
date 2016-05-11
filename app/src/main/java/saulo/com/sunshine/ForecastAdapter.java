@@ -2,6 +2,7 @@ package saulo.com.sunshine;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -88,6 +89,8 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     @Override
     public void onBindViewHolder(ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
         mCursor.moveToPosition(position);
+
+//        forecastAdapterViewHolder.itemView.setBackgroundColor(Color.parseColor("#C8E6C9"));;
         int weatherId = mCursor.getInt(WeatherContract.COL_WEATHER_CONDITION_ID);
         int defaultImage;
 
@@ -147,6 +150,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     public void onSaveInstanceState(Bundle outState) {
         mICM.onSaveInstanceState(outState);
+
     }
 
     public int getSelectedItemPosition() {

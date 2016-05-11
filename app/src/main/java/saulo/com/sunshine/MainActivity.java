@@ -162,12 +162,14 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             }
             mLocation = location;
         }
+        selectionCount = 0;
+        Log.d(TAG, "onResume: ");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        selectionCount = 0;
+
     }
 
     @Override
@@ -207,9 +209,10 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            if (selectionCount > 1) { //temporal workaround for bad animations
+            if (selectionCount > 1 ) { //temporal workaround for bad animations
                 ft.setCustomAnimations(R.anim.fragment_enter, R.anim.fragment_exit, R.anim.fragment_pop_enter, R.anim.fragment_pop_exit);
             } else {
+                Log.d(TAG, "onItemSelected: ");
                 selectionCount++;
             }
             ft.replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG);

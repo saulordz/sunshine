@@ -18,6 +18,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -108,6 +109,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setHasOptionsMenu(true);
     }
 
@@ -213,9 +215,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             }
         }
 
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
-            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        if (savedInstanceState != null) {
+            mAdapter.onRestoreInstanceState(savedInstanceState);
         }
 
         mAdapter.setUseTodayLayout(mUseTodayLayout);
@@ -339,9 +340,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        if (mPosition != RecyclerView.NO_POSITION) {
-            outState.putInt(SELECTED_KEY, mPosition);
-        }
+//        if (mPosition != RecyclerView.NO_POSITION) {
+//            outState.putInt(SELECTED_KEY, mPosition);
+//        }
+        mAdapter.onSaveInstanceState(outState);
+        outState.putInt("sel", mAdapter.getSelectedItemPosition());
         super.onSaveInstanceState(outState);
     }
 
