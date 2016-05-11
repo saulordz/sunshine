@@ -30,13 +30,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:windowSoftInputMode="adjustResize"
         >
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAnQhIrGyVINyno2piyLh_jPySQNVoVDUc" />
 
         <activity
+            android:windowSoftInputMode="adjustNothing"
             android:name=".MainActivity"
             android:theme="@style/AppTheme.Main">
             <intent-filter>
