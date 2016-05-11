@@ -206,9 +206,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                     @Override
                     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                         if (0 == mRecyclerView.computeVerticalScrollOffset()) {
-                            appbarView.setElevation(0);
+                            appbarView.setElevation(8);
                         } else {
-                            appbarView.setElevation(appbarView.getTargetElevation());
+                            appbarView.setElevation(8);
                         }
                     }
                 });
