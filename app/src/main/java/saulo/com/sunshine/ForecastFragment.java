@@ -18,7 +18,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,7 +47,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private int mPosition = RecyclerView.NO_POSITION;
 
     private boolean mHoldForTransition, mAutoSelectView;
-    private int mChoiceMode;;
+    private int mChoiceMode;
+    ;
 
     private View mEmptyView;
     private boolean mUseTodayLayout;
@@ -97,7 +97,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        if ( mHoldForTransition ) {
+        if (mHoldForTransition) {
             getActivity().supportPostponeEnterTransition();
         }
 
@@ -161,7 +161,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 ((CallbackForecastFragment) getActivity())
                         .onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
                                 locationSetting, date)
-                        ,vh );
+                                , vh);
                 mPosition = vh.getAdapterPosition();
             }
         }, mEmptyView, mChoiceMode);
@@ -180,17 +180,22 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
                         int max = parallaxView.getHeight();
+                        int offset = 54;
                         if (dy > 0) {
                             parallaxView.setTranslationY(Math.max(-max, parallaxView.getTranslationY() - dy / 2));
                         } else {
-                            parallaxView.setTranslationY(Math.min(0, parallaxView.getTranslationY() - dy / 2));
+                            //if the delta scrolled is less than the max parallax, dont scroll
+                            if(recyclerView.computeVerticalScrollOffset() < max*2){
+                                parallaxView.setTranslationY(Math.min(0, parallaxView.getTranslationY() - dy /2));
+                            }
+//                            parallaxView.setTranslationY(parallaxView.getTranslationY() - dy / 2);
                         }
                     }
                 });
             }
         }
 
-        final AppBarLayout appbarView = (AppBarLayout)rootView.findViewById(R.id.appbar);
+        final AppBarLayout appbarView = (AppBarLayout) rootView.findViewById(R.id.appbar);
         if (null != appbarView) {
             ViewCompat.setElevation(appbarView, 0);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -251,7 +256,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
 
         updateEmptyView();
-        if ( data.getCount() == 0 ) {
+        if (data.getCount() == 0) {
             getActivity().supportStartPostponedEnterTransition();
         } else {
             mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -267,9 +272,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                             Cursor data = mAdapter.getCursor();
                             int count = data.getCount();
                             int dateColumn = data.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE);
-                            for ( int i = 0; i < count; i++ ) {
+                            for (int i = 0; i < count; i++) {
                                 data.moveToPosition(i);
-                                if ( data.getLong(dateColumn) == mInitialSelectedDate ) {
+                                if (data.getLong(dateColumn) == mInitialSelectedDate) {
                                     position = i;
                                     break;
                                 }
@@ -283,7 +288,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                         if (null != vh && mAutoSelectView) {
                             mAdapter.selectView(vh);
                         }
-                        if ( mHoldForTransition ) {
+                        if (mHoldForTransition) {
                             getActivity().supportStartPostponedEnterTransition();
                         }
                         return true;
