@@ -43,4 +43,5 @@ dependencies {
     compile 'com.google.android.apps.muzei:muzei-api:2.0'
 
     compile 'com.pushbots:pushbots-lib:2.0.13@aar'
+
 }
