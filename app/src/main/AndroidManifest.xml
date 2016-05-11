@@ -96,35 +96,35 @@
 
 
         <!-- The Google Cloud Messaging receiver and services -->
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+        <!--<receiver-->
+            <!--android:name="com.google.android.gms.gcm.GcmReceiver"-->
+            <!--android:exported="true"-->
+            <!--android:permission="com.google.android.c2dm.permission.SEND">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+                <!--<action android:name="com.google.android.c2dm.intent.REGISTRATION" />-->
 
-                <category android:name="saulo.com.sunshine" />
-            </intent-filter>
-        </receiver>
+                <!--<category android:name="saulo.com.sunshine" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
-        <service
-            android:name=".gcm.MyGcmListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".gcm.MyInstanceIDListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".gcm.RegistrationIntentService"
-            android:exported="false"></service>
+        <!--<service-->
+            <!--android:name=".gcm.MyGcmListenerService"-->
+            <!--android:exported="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
+        <!--<service-->
+            <!--android:name=".gcm.MyInstanceIDListenerService"-->
+            <!--android:exported="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.gms.iid.InstanceID" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
+        <!--<service-->
+            <!--android:name=".gcm.RegistrationIntentService"-->
+            <!--android:exported="false"></service>-->
 
 
         <receiver
@@ -172,6 +172,26 @@
                 android:name="color"
                 android:value="@color/colorPrimary" />
         </service>
+
+        <receiver
+            android:name="com.pushbots.google.gcm.GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <!-- Receives the registration id. -->
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="saulo.com.sunshine" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.pushbots.push.DefaultPushHandler" />
+
+        <!--<receiver android:name=".pushbots.NotificationHandler" />-->
+
+        <!--<service android:name=".gcm.RegistrationIntentService" />-->
+        <service android:name="com.pushbots.push.GCMIntentService" />
+
     </application>
 
 </manifest>

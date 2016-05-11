@@ -32,12 +32,19 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+
+import com.google.android.gms.gcm.GcmListenerService;
+import com.google.android.gms.gcm.GcmReceiver;
+import com.google.android.gms.gcm.GcmListenerService;
+
 import com.pushbots.push.Pushbots;
 
 import java.io.IOException;
 import java.util.Locale;
 
+import saulo.com.sunshine.gcm.MyGcmListenerService;
 import saulo.com.sunshine.gcm.RegistrationIntentService;
+import saulo.com.sunshine.pushbots.NotificationHandler;
 import saulo.com.sunshine.sync.SunshineSyncAdapter;
 
 public class MainActivity extends AppCompatActivity implements ForecastFragment.CallbackForecastFragment, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -68,8 +75,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
 
-
-
         if(Utility.isFirstLaunch(this)){
             askForLocation();
         }
@@ -92,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 .findFragmentById(R.id.fragment_forecast));
         mForecastFragment.setUseTodayLayout(!mTwoPane);
 
+
         SunshineSyncAdapter.initializeSyncAdapter(this);
 
         if (checkPlayServices()) {
@@ -105,6 +111,11 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         }
 
         Pushbots.sharedInstance().init(this);
+        Pushbots.sharedInstance().setRegStatus(true);
+        Pushbots.sharedInstance().register();
+//        Pushbots.sharedInstance().setRegStatus(false);
+//        Pushbots.sharedInstance().unregister();
+//        Pushbots.sharedInstance().setCustomHandler(GcmReceiver.class);
 
     }
 
