@@ -1,10 +1,10 @@
 package saulo.com.sunshine;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
@@ -17,14 +17,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
+import com.bumptech.glide.util.Util;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,7 +35,6 @@ import com.google.android.gms.location.LocationServices;
 import com.pushbots.push.Pushbots;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
 
 import saulo.com.sunshine.gcm.RegistrationIntentService;
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     private String mLocation;
     private boolean mTwoPane;
 
+    ForecastFragment mForecastFragment;
+
     private GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -65,13 +69,10 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         getSupportActionBar().setTitle(null);
 
 
-        //        if (checkForPermissions()) {
-//            connectToLocationAPI();
-//        } else {
-//            askForPermissions();
-//        }
 
-//        saveLocationPreference(30339+"");
+        if(Utility.isFirstLaunch(this)){
+            askForLocation();
+        }
 
         mLocation = Utility.getPreferredLocation(getApplicationContext());
 
@@ -87,9 +88,9 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             getSupportActionBar().setElevation(0f);
         }
 
-        ForecastFragment forecastFragment = ((ForecastFragment) getSupportFragmentManager()
+        mForecastFragment = ((ForecastFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_forecast));
-        forecastFragment.setUseTodayLayout(!mTwoPane);
+        mForecastFragment.setUseTodayLayout(!mTwoPane);
 
         SunshineSyncAdapter.initializeSyncAdapter(this);
 
@@ -105,6 +106,76 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
         Pushbots.sharedInstance().init(this);
 
+    }
+
+    private void askForLocation() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//
+//        builder.setTitle("Location");
+//        builder.setMessage("Would you like to use your current location?");
+//
+//        builder.setCancelable(false);
+//
+//        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+//
+//            public void onClick(DialogInterface dialog, int which) {
+//                // Do nothing but close the dialog
+//                if (checkForPermissions()) {
+//                    connectToLocationAPI();
+//                } else {
+//                    askForPermissions();
+//                }
+//                dialog.dismiss();
+//            }
+//
+//        });
+//
+//        builder.setNegativeButton("Enter zip code", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                requestLocation();
+//            }
+//        });
+//
+//        AlertDialog alert = builder.create();
+//        alert.show();
+
+        if (checkForPermissions()) {
+            connectToLocationAPI();
+        } else {
+            askForPermissions();
+        }
+    }
+
+    private void requestLocation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter your zip code");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        builder.setView(input);
+        builder.setCancelable(false);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String location = input.getText().toString();
+                saveLocationPreference(location);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                askForLocation();
+            }
+        });
+
+        builder.show();
     }
 
     private void askForPermissions() {
@@ -152,9 +223,9 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         String location = Utility.getPreferredLocation(this);
         // update the location in our second pane using the fragment manager
         if (location != null && !location.equals(mLocation)) {
-            ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
-            if (null != ff) {
-                ff.onLocationChanged();
+            mForecastFragment = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+            if (null != mForecastFragment) {
+                mForecastFragment.onLocationChanged();
             }
             DetailFragment df = (DetailFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
             if (null != df) {
@@ -163,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             mLocation = location;
         }
         selectionCount = 0;
-        Log.d(TAG, "onResume: ");
     }
 
     @Override
@@ -209,14 +279,13 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            if (selectionCount > 1 ) { //temporal workaround for bad animations
+            if (selectionCount > 1) { //temporal workaround for bad animations
                 ft.setCustomAnimations(R.anim.fragment_enter, R.anim.fragment_exit, R.anim.fragment_pop_enter, R.anim.fragment_pop_exit);
             } else {
-                Log.d(TAG, "onItemSelected: ");
                 selectionCount++;
             }
             ft.replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG);
-            ft.commit();
+            ft.commitAllowingStateLoss();
 
 
         } else {
@@ -232,9 +301,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            return;
-//        }
         //supress the warning since we already checked for the permission
         @SuppressWarnings("MissingPermission") Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         double latitude = location.getLatitude();
@@ -244,14 +310,13 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
         String zipCode = null;
         try {
-            zipCode = geocoder.getFromLocation(latitude,longitude,1).get(0).getPostalCode();
+            zipCode = geocoder.getFromLocation(latitude, longitude, 1).get(0).getPostalCode();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(zipCode!=null){
+        if (zipCode != null) {
             saveLocationPreference(zipCode);
         }
-        Log.d(TAG, "onConnected: " + location.toString());
     }
 
     @Override
@@ -273,12 +338,10 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d(TAG, "onConnectionSuspended: ");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG, "onConnectionFailed: ");
     }
 
     protected synchronized GoogleApiClient buildGoogleApiClient() {
@@ -289,13 +352,21 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 .build();
     }
 
-    public void saveLocationPreference(String location){
+    public void saveLocationPreference(String location) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.pref_location_key), location);
+        editor.putBoolean(getString(R.string.pref_first_launch), false);
         editor.commit();
 
-        SunshineSyncAdapter.syncImmediately(this);
+//        SunshineSyncAdapter.syncImmediately(this);
+//        SunshineSyncAdapter.initializeSyncAdapter(this);
+        mForecastFragment = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+        if (null != mForecastFragment) {
+            mForecastFragment.onLocationChanged();
+        }
+        mLocation = location;
+
     }
 }

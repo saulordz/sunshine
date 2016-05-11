@@ -23,6 +23,11 @@ public class Utility {
 
     public static float DEFAULT_LATLONG = 0F;
 
+    public static boolean isFirstLaunch(Context context){
+        SharedPreferences prefs
+                = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(context.getString(R.string.pref_first_launch), true);
+    }
     public static boolean isLocationLatLonAvailable(Context context) {
         SharedPreferences prefs
                 = PreferenceManager.getDefaultSharedPreferences(context);

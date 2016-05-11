@@ -79,6 +79,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         void onItemSelected(Uri uri, ForecastAdapter.ForecastAdapterViewHolder vh);
     }
 
+    public void notifyDataChanged(){
+        mAdapter.notifyDataSetChanged();
+    }
+
     public ForecastFragment() {
     }
 
