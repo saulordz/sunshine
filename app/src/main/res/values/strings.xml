@@ -24,7 +24,7 @@
 
 
 
-    <string name="action_show_map">Show Map</string>
+    <string name="action_show_map">Show current location</string>
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="format_full_friendly_date"><xliff:g id="day">%1$s</xliff:g>, <xliff:g id="date">%2$s</xliff:g></string>
